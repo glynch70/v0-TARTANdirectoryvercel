@@ -17,19 +17,26 @@ export default function HomePage() {
       />
 
       {/* Logo and Hero */}
-      <div className="px-4 py-6 text-center">
-        <div className="flex justify-center mb-4">
+      <div
+        className="relative px-4 py-16 text-center bg-cover bg-center before:absolute before:inset-0 before:bg-black/40"
+        style={{
+          backgroundImage: "url('/images/lunch-atop-a-skyscraper-charles-clyde-ebbets.jpg')",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="relative z-10 flex justify-center mb-4">
           <Image
             src="/images/tt-20logo.png"
             alt="Tartan Talks Logo"
             width={200}
             height={200}
-            className="w-40 h-40 object-contain"
+            className="w-40 h-40 object-contain drop-shadow-lg"
           />
         </div>
 
-        <h1 className="text-4xl font-bold text-slate-900 mb-1">Tartan Talks</h1>
-        <p className="text-lg text-slate-600 mb-6">"Fixers &amp; Mixers" Connecting trusted businessess</p>
+        <h1 className="relative z-10 text-4xl font-bold text-white mb-1 drop-shadow-md">Tartan Talks</h1>
+        <p className="relative z-10 text-lg text-white/90 mb-6 drop-shadow-sm"></p>
       </div>
 
       {/* Bento Grid */}
