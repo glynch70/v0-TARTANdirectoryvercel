@@ -149,6 +149,78 @@ export default function AboutPage() {
           </a>
         </motion.section>
 
+        {/* Connect with Tartan Talks */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85 }}
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-xl"
+        >
+          <h2 className="text-xl font-bold text-white mb-6">Connect with Tartan Talks</h2>
+
+          <div className="space-y-4 mb-6">
+            {/* Website and Eventbrite links */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a
+                href="https://tartantalks.co.uk/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-300 hover:text-blue-200 rounded-lg font-medium transition-all"
+              >
+                <span>🌐</span>
+                Website
+              </a>
+              <a
+                href="https://www.eventbrite.com/e/tartan-talks-tickets-1062946444429"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/30 text-indigo-300 hover:text-indigo-200 rounded-lg font-medium transition-all"
+              >
+                <span>🎫</span>
+                Events
+              </a>
+            </div>
+
+            {/* Social links */}
+            <div>
+              <p className="text-sm text-slate-400 mb-3">Follow us on social media</p>
+              <div className="flex gap-3 flex-wrap">
+                <a
+                  href="https://www.facebook.com/p/Tartan-Talks-61565613290594/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 flex items-center justify-center text-blue-300 hover:text-blue-200 transition-all"
+                  title="Facebook"
+                >
+                  <span className="text-xl">f</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/tartantalks/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-lg bg-pink-600/20 hover:bg-pink-600/30 border border-pink-500/30 flex items-center justify-center text-pink-300 hover:text-pink-200 transition-all"
+                  title="Instagram"
+                >
+                  <span className="text-xl">📷</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/tartantimber/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-lg bg-blue-700/20 hover:bg-blue-700/30 border border-blue-600/30 flex items-center justify-center text-blue-300 hover:text-blue-200 transition-all"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-sm text-slate-400 text-center">
+            Join our community and stay updated with the latest networking events and opportunities.
+          </p>
+        </motion.section>
+
         {/* Contact */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
