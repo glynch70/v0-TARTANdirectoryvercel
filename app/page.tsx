@@ -26,13 +26,7 @@ export default function HomePage() {
         }}
       >
         <div className="relative z-10 flex justify-center mb-4">
-          <Image
-            src="/images/copy-20of-20tt-20logo.png"
-            alt="Tartan Talks Logo"
-            width={200}
-            height={200}
-            className="w-40 h-40 object-contain drop-shadow-lg"
-          />
+          
         </div>
 
         <h1 className="relative z-10 text-4xl font-bold text-white mb-1 drop-shadow-md">Tartan Talks</h1>
