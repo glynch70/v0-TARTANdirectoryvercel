@@ -7,7 +7,7 @@ import { FloatingNav } from "./components/floating-nav"
 export const metadata: Metadata = {
   title: "Tartan Talks - Member Directory",
   description: "Find trusted local businesses and trades in Edinburgh and the Lothians",
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -19,10 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-apple antialiased bg-white">
         <InitStorage />
-        <main className="leading-7 tracking-tighter pb-10 my-[-10px]">{children}</main>
-        <footer className="pb-24 pt-6 text-center">
-          
-          
+        <main className="leading-7 tracking-tighter">{children}</main>
+        <footer className="pt-6 text-center pb-20 text-xs text-gray-500">
+          <p>© 2026 Tartan Talks</p>
+          <p>Built by Bear Media</p>
         </footer>
         <FloatingNav />
       </body>

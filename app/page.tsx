@@ -17,8 +17,8 @@ export default function HomePage() {
       />
 
       {/* Logo and Hero */}
-      <div className="px-4 py-8 text-center">
-        <div className="flex justify-center mb-6">
+      <div className="px-4 py-6 text-center">
+        <div className="flex justify-center mb-4">
           <Image
             src="/images/tt-20logo.png"
             alt="Tartan Talks Logo"
@@ -28,12 +28,12 @@ export default function HomePage() {
           />
         </div>
 
-        <h1 className="text-4xl font-bold text-slate-900 mb-2">Tartan Talks</h1>
-        <p className="text-lg text-slate-600 mb-8">"Fixers &amp; Mixers" Connecting trusted businessess</p>
+        <h1 className="text-4xl font-bold text-slate-900 mb-1">Tartan Talks</h1>
+        <p className="text-lg text-slate-600 mb-6">"Fixers &amp; Mixers" Connecting trusted businessess</p>
       </div>
 
       {/* Bento Grid */}
-      <div className="px-4 py-12 max-w-2xl mx-auto pb-32">
+      <div className="px-4 py-6 max-w-2xl mx-auto pb-40">
         <div className="grid grid-cols-1 gap-4">
           {/* Browse Directory */}
           <Link href="/directory">
