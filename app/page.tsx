@@ -1,116 +1,156 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Users, Building2, Phone, MapPin } from "lucide-react"
+"use client"
 
-export default function HomePage() {
+import { Users, Target, Heart, Phone, Linkedin } from "lucide-react"
+import { motion } from "framer-motion"
+
+export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[rgb(20,47,84)] to-[rgb(43,122,120)] text-white pt-12 pb-16 px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="mb-6 flex justify-center">
-            <Image
-              src="/images/tartan-talks-logo-circle.png"
-              alt="Tartan Talks"
-              width={160}
-              height={160}
-              className="rounded-full"
-            />
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Tartan Talks Member Directory</h1>
-          <p className="text-lg md:text-xl mb-8 text-white/90 px-4">
-            Find trusted local businesses and trades in Edinburgh and the Lothians
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Header */}
+      <motion.div 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-2xl"
+      >
+        <div className="px-4 py-4">
+          <h1 className="text-2xl font-bold text-white">About</h1>
+        </div>
+      </motion.div>
+
+      {/* Content */}
+      <div className="px-4 py-6 space-y-8">
+        {/* Intro */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-xl"
+        >
+          <h2 className="text-xl font-bold text-white mb-3">Tartan Talks</h2>
+          <p className="text-slate-300 leading-relaxed mb-4">
+            Tartan Talks is a professional networking community connecting trusted businesses and trades across
+            Edinburgh and the Lothians. We bring together business owners, trades professionals, and service providers
+            committed to quality and lasting relationships.
           </p>
-          <Link
-            href="/directory"
-            className="inline-block bg-white text-[rgb(20,47,84)] px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-100 transition-colors active:scale-95"
+          <p className="text-slate-300 leading-relaxed">
+            Our "Fixers & Mixers" tagline reflects our dual focus: bringing together skilled professionals (fixers) in a
+            collaborative networking environment (mixers).
+          </p>
+        </motion.section>
+
+        {/* Values */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold text-white mb-4">What We Stand For</h2>
+
+          {[
+            { icon: Target, color: "from-blue-600 to-indigo-700", title: "Quality Service", desc: "All members are committed to delivering exceptional work" },
+            { icon: Users, color: "from-teal-600 to-cyan-700", title: "Community First", desc: "Building relationships and supporting local businesses" },
+            { icon: Heart, color: "from-amber-600 to-orange-700", title: "Trust & Integrity", desc: "Members you can rely on for honest, professional service" }
+          ].map((value, index) => (
+            <motion.div
+              key={value.title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+              whileHover={{ scale: 1.02, x: 5 }}
+              className="flex gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 shadow-xl"
+            >
+              <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${value.color} flex items-center justify-center flex-shrink-0`}>
+                <value.icon className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-1">{value.title}</h3>
+                <p className="text-sm text-slate-400">{value.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </section>
+
+        {/* Coverage */}
+        <section>
+          <h2 className="text-xl font-bold text-white mb-4">Our Coverage</h2>
+          <div className="space-y-3">
+            {[
+              { title: "Edinburgh", desc: "Scotland's capital and our largest member community" },
+              { title: "West Lothian", desc: "Livingston, Bathgate, Linlithgow, and surrounding areas" },
+              { title: "East Lothian", desc: "Haddington, North Berwick, Dunbar, and more" }
+            ].map((area, index) => (
+              <motion.div
+                key={area.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 shadow-xl"
+              >
+                <h3 className="font-semibold text-white mb-1">{area.title}</h3>
+                <p className="text-sm text-slate-400">{area.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Founder */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="bg-gradient-to-br from-amber-500/10 to-orange-600/10 backdrop-blur-sm border border-amber-500/20 rounded-xl p-6 shadow-xl"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+              <Linkedin className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-white">Tim Young</h3>
+              <p className="text-amber-400">Founder & Owner</p>
+            </div>
+          </div>
+          <p className="text-slate-300 leading-relaxed mb-4">
+            Connect with Tim on LinkedIn to learn more about Tartan Talks and membership opportunities.
+          </p>
+          <a
+            href="https://www.linkedin.com/in/tartantimber/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-500/50 transition-shadow"
           >
-            Browse Directory
-          </Link>
-        </div>
-      </section>
+            <Linkedin className="w-5 h-5" />
+            Connect on LinkedIn
+          </a>
+        </motion.section>
 
-      {/* Value Cards - Mobile Optimized */}
-      <section className="py-8 px-4">
-        <div className="max-w-2xl mx-auto">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-              <div className="w-12 h-12 bg-[rgb(20,47,84)] rounded-full flex items-center justify-center mx-auto mb-3">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-sm font-semibold mb-1">Professional Network</h3>
-              <p className="text-xs text-gray-600">Vetted local businesses</p>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-              <div className="w-12 h-12 bg-[rgb(43,122,120)] rounded-full flex items-center justify-center mx-auto mb-3">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-sm font-semibold mb-1">Local Trades</h3>
-              <p className="text-xs text-gray-600">Trusted services nearby</p>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-              <div className="w-12 h-12 bg-[rgb(212,175,55)] rounded-full flex items-center justify-center mx-auto mb-3">
-                <Phone className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-sm font-semibold mb-1">Direct Contact</h3>
-              <p className="text-xs text-gray-600">Quick responses</p>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-              <div className="w-12 h-12 bg-[rgb(34,68,54)] rounded-full flex items-center justify-center mx-auto mb-3">
-                <MapPin className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-sm font-semibold mb-1">Regional</h3>
-              <p className="text-xs text-gray-600">Edinburgh & Lothians</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Community Section */}
-      <section className="bg-gray-50 py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8">Our Community</h2>
-          <p className="text-lg text-gray-700 mb-8">
-            Tartan Talks brings together business owners, trades professionals, and service providers across Edinburgh
-            and the Lothians. Our members are committed to quality service and building lasting business relationships.
+        {/* Contact */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          whileHover={{ scale: 1.02 }}
+          className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 backdrop-blur-sm border border-white/10 text-white rounded-xl p-6 text-center shadow-xl"
+        >
+          <Phone className="w-8 h-8 mx-auto mb-3 text-blue-400" />
+          <h2 className="text-lg font-bold mb-2">Get In Touch</h2>
+          <p className="text-slate-300 text-sm">
+            Interested in joining Tartan Talks? Contact us to learn more about membership.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div className="bg-white p-6 rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">Edinburgh</h3>
-              <p className="text-gray-600">Scotland's capital, home to our largest member community</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">West & East Lothian</h3>
-              <p className="text-gray-600">Serving Livingston, Bathgate, Linlithgow, and surrounding areas</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">Growing Network</h3>
-              <p className="text-gray-600">Expanding across Central Scotland with trusted professionals</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </motion.section>
 
-      {/* Footer */}
-      <footer className="bg-[rgb(20,47,84)] text-white py-8 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-white/80">© 2025 Tartan Talks. All rights reserved.</p>
-          <p className="text-white/60 mt-2">
+        {/* Footer */}
+        <section className="text-center text-sm text-slate-400 pt-4">
+          <p>© 2025 Tartan Talks. All rights reserved.</p>
+          <p className="mt-2">
             Built by{" "}
             <a
-              href="https://www.bear-media.com"
+              href="https://bearmedia.co.uk"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[rgb(212,175,55)] hover:underline"
+              className="text-amber-400 font-semibold hover:text-amber-300 transition-colors"
             >
               Bear Media
             </a>
           </p>
-        </div>
-      </footer>
+        </section>
+      </div>
     </div>
   )
 }
