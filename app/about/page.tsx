@@ -102,12 +102,12 @@ export default function AboutPage() {
               <Linkedin className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">Tim Young</h3>
+              <h3 className="text-xl font-bold text-white">Mark Innes</h3>
               <p className="text-amber-400">Founder & Owner</p>
             </div>
           </div>
           <p className="text-slate-300 leading-relaxed mb-4">
-            Connect with Tim on LinkedIn to learn more about Tartan Talks and membership opportunities.
+            Connect with Mark on LinkedIn to learn more about Tartan Talks and membership opportunities.
           </p>
           <a
             href="https://www.linkedin.com/in/tartantimber/"
