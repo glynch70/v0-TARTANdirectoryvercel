@@ -237,12 +237,12 @@ export default function AboutPage() {
         </motion.section>
 
         {/* Footer */}
-        <section className="text-center text-sm text-slate-400 pt-4">
+        <section className="text-center text-sm text-slate-400 pt-4 pb-8">
           <p>© 2025 Tartan Talks. All rights reserved.</p>
           <p className="mt-2">
             Built by{" "}
             <a
-              href="https://bearmedia.co.uk"
+              href="https://www.bear-media.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-amber-400 font-semibold hover:text-amber-300 transition-colors"
