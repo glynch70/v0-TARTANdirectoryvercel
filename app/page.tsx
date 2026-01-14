@@ -88,7 +88,7 @@ export default function HomePage() {
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-slate-900 mb-1">Mark Innes</h3>
-                <p className="text-sm text-slate-600 mb-3">Founder & Community Leader</p>
+                <p className="text-sm text-slate-600 mb-3">Founder &amp; Host</p>
                 <a
                   href="https://www.linkedin.com/in/tartantimber/"
                   target="_blank"
