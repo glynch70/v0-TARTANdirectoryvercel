@@ -1,139 +1,165 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Users, Loader2, ChevronRight } from "lucide-react"
+import { Search, MapPin, Loader2, Building2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
 
 interface Member {
   id: string
   firstName: string
   lastName: string
+  email: string
+  phone: string
   company: string
   businessCategory: string
   serviceDescription: string
   tradeOrBusinessType: string
+  location: string
+  membershipType: string
   status: string
+  tags: string[]
+  website?: string
 }
 
-export default function TradesPage() {
-  const router = useRouter()
+export default function DirectoryPage() {
   const [hasMounted, setHasMounted] = useState(false)
   const [members, setMembers] = useState<Member[]>([])
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("tartan_talks_members")
-      if (stored) {
-        const loadedMembers = JSON.parse(stored)
-        console.log("[v0] Loaded members for trades:", loadedMembers.length)
-        setMembers(loadedMembers)
+    const loadMembers = () => {
+      try {
+        const stored = localStorage.getItem("tartan_talks_members")
+        if (stored) {
+          const parsedMembers = JSON.parse(stored)
+          console.log("[v0] Loaded members count:", parsedMembers.length)
+          setMembers(parsedMembers)
+        }
+      } catch (error) {
+        console.error("Failed to load members:", error)
+      } finally {
+        setHasMounted(true)
       }
-    } catch (error) {
-      console.error("Failed to load members:", error)
-    } finally {
-      setHasMounted(true)
     }
+
+    loadMembers()
   }, [])
 
-  const categorizedMembers = useMemo(() => {
-    const activeMembers = members.filter((m) => m.status === "active")
+  const filteredMembers = useMemo(() => {
+    let filtered = members.filter((m) => m.status === "active")
 
-    const grouped = activeMembers.reduce(
-      (acc, member) => {
-        const category = member.businessCategory || "Other Services"
-        if (!acc[category]) {
-          acc[category] = []
-        }
-        acc[category].push(member)
-        return acc
-      },
-      {} as Record<string, Member[]>,
-    )
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(
+        (member) =>
+          member.firstName.toLowerCase().includes(query) ||
+          member.lastName.toLowerCase().includes(query) ||
+          member.company.toLowerCase().includes(query) ||
+          member.serviceDescription.toLowerCase().includes(query) ||
+          member.tradeOrBusinessType.toLowerCase().includes(query) ||
+          member.businessCategory.toLowerCase().includes(query) ||
+          member.location.toLowerCase().includes(query),
+      )
+    }
 
-    return Object.entries(grouped)
-      .map(([category, members]) => ({
-        category,
-        members,
-        count: members.length,
-      }))
-      .sort((a, b) => b.count - a.count)
-  }, [members])
-
-  const toggleCategory = (category: string) => {
-    setExpandedCategory(expandedCategory === category ? null : category)
-  }
+    return filtered
+  }, [members, searchQuery])
 
   if (!hasMounted) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-[rgb(20,47,84)] animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading trades...</p>
+          <Loader2 className="w-12 h-12 text-amber-500 animate-spin mx-auto mb-4" />
+          <p className="text-slate-300">Loading directory...</p>
         </div>
       </div>
     )
   }
 
-  const totalMembers = members.filter((m) => m.status === "active").length
-
   return (
-    <div className="min-h-screen bg-white">
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Sticky Search Bar */}
+      <motion.div 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-2xl"
+      >
         <div className="px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Trades</h1>
-          <p className="text-sm text-gray-600">
-            {categorizedMembers.length} categories • {totalMembers} members
-          </p>
+          <h1 className="text-2xl font-bold text-white mb-3">Directory</h1>
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <input
+              type="search"
+              placeholder="Search name, trade, company..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 text-base bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20"
+              style={{ fontSize: "16px" }}
+            />
+          </div>
+          <div className="mt-2 text-sm text-slate-400">
+            {filteredMembers.length} {filteredMembers.length === 1 ? "member" : "members"}
+          </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="px-4 py-4 space-y-3">
-        {categorizedMembers.map((group) => {
-          const isExpanded = expandedCategory === group.category
-
-          return (
-            <div key={group.category} className="border-2 border-gray-200 rounded-xl overflow-hidden">
-              <button
-                onClick={() => toggleCategory(group.category)}
-                className="w-full px-5 py-4 bg-white hover:bg-gray-50 active:bg-gray-100 transition-colors flex items-center justify-between"
+      {/* Member Cards */}
+      <div className="px-4 py-4 space-y-4">
+        <AnimatePresence mode="popLayout">
+          {filteredMembers.length > 0 ? (
+            filteredMembers.map((member, index) => (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ delay: index * 0.03 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="text-left">
-                  <h2 className="text-lg font-bold text-gray-900">{group.category}</h2>
-                  <div className="flex items-center gap-1 mt-1 text-gray-600">
-                    <Users className="w-4 h-4" />
-                    <span className="text-sm">{group.count} members</span>
+                <Link
+                  href={`/directory/${member.id}`}
+                  className="block bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 shadow-xl hover:bg-white/10 transition-colors"
+                >
+                  {/* Trade Badge */}
+                  <div className="mb-3">
+                    <span className="inline-block px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm font-semibold rounded-lg shadow-lg">
+                      {member.serviceDescription || member.tradeOrBusinessType}
+                    </span>
                   </div>
-                </div>
-                <ChevronRight
-                  className={`w-6 h-6 text-gray-400 transition-transform ${isExpanded ? "rotate-90" : ""}`}
-                />
-              </button>
 
-              {isExpanded && (
-                <div className="border-t-2 border-gray-200 bg-gray-50">
-                  {group.members.map((member) => (
-                    <button
-                      key={member.id}
-                      onClick={() => router.push(`/directory/${member.id}`)}
-                      className="w-full px-5 py-4 border-b border-gray-200 last:border-b-0 hover:bg-white active:bg-gray-100 transition-colors text-left"
-                    >
-                      <div className="mb-2">
-                        <span className="inline-block px-2.5 py-1 bg-[rgb(20,47,84)] text-white text-xs font-semibold rounded">
-                          {member.serviceDescription || member.tradeOrBusinessType}
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-gray-900 mb-1">
-                        {member.firstName} {member.lastName}
-                      </h3>
-                      <p className="text-sm text-gray-600">{member.company}</p>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )
-        })}
+                  {/* Name */}
+                  <h3 className="text-xl font-bold text-white mb-1">
+                    {member.firstName} {member.lastName}
+                  </h3>
+
+                  {/* Company */}
+                  <div className="flex items-start gap-2 mb-2">
+                    <Building2 className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
+                    <p className="text-slate-300 font-medium">{member.company}</p>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm">{member.location}</span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-12 text-center"
+            >
+              <Search className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">No members found</h3>
+              <p className="text-slate-400">Try a different search term</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
