@@ -1,18 +1,30 @@
 "use client"
 
-import { Users, Target, Heart, Phone, Linkedin } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Users, Target, Heart, Phone, Linkedin, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 
 export default function AboutPage() {
+  const router = useRouter()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
-      <motion.div 
+      <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-2xl"
       >
         <div className="px-4 py-4">
+          <div className="flex items-center gap-3 mb-2 sm:mb-0">
+            <button
+              onClick={() => router.push("/")}
+              className="sm:hidden inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
+          </div>
           <h1 className="text-2xl font-bold text-white">About</h1>
         </div>
       </motion.div>
@@ -43,9 +55,24 @@ export default function AboutPage() {
           <h2 className="text-xl font-bold text-white mb-4">What We Stand For</h2>
 
           {[
-            { icon: Target, color: "from-blue-600 to-indigo-700", title: "Quality Service", desc: "All members are committed to delivering exceptional work" },
-            { icon: Users, color: "from-teal-600 to-cyan-700", title: "Community First", desc: "Building relationships and supporting local businesses" },
-            { icon: Heart, color: "from-amber-600 to-orange-700", title: "Trust & Integrity", desc: "Members you can rely on for honest, professional service" }
+            {
+              icon: Target,
+              color: "from-blue-600 to-indigo-700",
+              title: "Quality Service",
+              desc: "All members are committed to delivering exceptional work",
+            },
+            {
+              icon: Users,
+              color: "from-teal-600 to-cyan-700",
+              title: "Community First",
+              desc: "Building relationships and supporting local businesses",
+            },
+            {
+              icon: Heart,
+              color: "from-amber-600 to-orange-700",
+              title: "Trust & Integrity",
+              desc: "Members you can rely on for honest, professional service",
+            },
           ].map((value, index) => (
             <motion.div
               key={value.title}
@@ -55,7 +82,9 @@ export default function AboutPage() {
               whileHover={{ scale: 1.02, x: 5 }}
               className="flex gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 shadow-xl"
             >
-              <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${value.color} flex items-center justify-center flex-shrink-0`}>
+              <div
+                className={`w-10 h-10 rounded-lg bg-gradient-to-r ${value.color} flex items-center justify-center flex-shrink-0`}
+              >
                 <value.icon className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -73,7 +102,7 @@ export default function AboutPage() {
             {[
               { title: "Edinburgh", desc: "Scotland's capital and our largest member community" },
               { title: "West Lothian", desc: "Livingston, Bathgate, Linlithgow, and surrounding areas" },
-              { title: "East Lothian", desc: "Haddington, North Berwick, Dunbar, and more" }
+              { title: "East Lothian", desc: "Haddington, North Berwick, Dunbar, and more" },
             ].map((area, index) => (
               <motion.div
                 key={area.title}

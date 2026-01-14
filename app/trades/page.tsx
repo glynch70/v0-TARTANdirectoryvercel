@@ -2,7 +2,20 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Users, Loader2, ChevronRight, Building2, Wrench, Calculator, Zap, Home, HeartPulse, UserCheck, Briefcase } from "lucide-react"
+import {
+  Users,
+  Loader2,
+  ChevronRight,
+  Building2,
+  Wrench,
+  Calculator,
+  Zap,
+  Home,
+  HeartPulse,
+  UserCheck,
+  Briefcase,
+  ArrowLeft,
+} from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Member {
@@ -24,7 +37,7 @@ const CATEGORY_ICONS: Record<string, any> = {
   "Property, Cleaning & Maintenance": Home,
   "Health & Wellbeing": HeartPulse,
   "Recruitment & HR": UserCheck,
-  "Other Services": Briefcase
+  "Other Services": Briefcase,
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -35,7 +48,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   "Property, Cleaning & Maintenance": "from-cyan-500 to-blue-600",
   "Health & Wellbeing": "from-rose-500 to-red-600",
   "Recruitment & HR": "from-indigo-500 to-purple-600",
-  "Other Services": "from-blue-500 to-indigo-600"
+  "Other Services": "from-blue-500 to-indigo-600",
 }
 
 export default function TradesPage() {
@@ -102,12 +115,21 @@ export default function TradesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <motion.div 
+      <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-2xl"
       >
         <div className="px-4 py-4">
+          <div className="flex items-center gap-3 mb-2 sm:mb-0">
+            <button
+              onClick={() => router.push("/")}
+              className="sm:hidden inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
+          </div>
           <h1 className="text-2xl font-bold text-white mb-1">Trades</h1>
           <p className="text-sm text-slate-400">
             {categorizedMembers.length} categories • {totalMembers} members
@@ -122,7 +144,7 @@ export default function TradesPage() {
           const colorClass = CATEGORY_COLORS[group.category] || "from-slate-600 to-slate-700"
 
           return (
-            <motion.div 
+            <motion.div
               key={group.category}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -136,7 +158,9 @@ export default function TradesPage() {
                 whileTap={{ scale: 0.99 }}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${colorClass} flex items-center justify-center`}>
+                  <div
+                    className={`w-12 h-12 rounded-lg bg-gradient-to-r ${colorClass} flex items-center justify-center`}
+                  >
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="text-left">
@@ -147,10 +171,7 @@ export default function TradesPage() {
                     </div>
                   </div>
                 </div>
-                <motion.div
-                  animate={{ rotate: isExpanded ? 90 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.div animate={{ rotate: isExpanded ? 90 : 0 }} transition={{ duration: 0.2 }}>
                   <ChevronRight className="w-6 h-6 text-slate-400" />
                 </motion.div>
               </motion.button>
@@ -175,7 +196,9 @@ export default function TradesPage() {
                         whileHover={{ x: 5 }}
                       >
                         <div className="mb-2">
-                          <span className={`inline-block px-2.5 py-1 bg-gradient-to-r ${colorClass} text-white text-xs font-semibold rounded`}>
+                          <span
+                            className={`inline-block px-2.5 py-1 bg-gradient-to-r ${colorClass} text-white text-xs font-semibold rounded`}
+                          >
                             {member.serviceDescription || member.tradeOrBusinessType}
                           </span>
                         </div>

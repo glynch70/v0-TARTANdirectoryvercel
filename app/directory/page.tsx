@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { Search, MapPin, Loader2, Building2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Search, MapPin, Loader2, Building2, ArrowLeft } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
@@ -23,6 +24,7 @@ interface Member {
 }
 
 export default function DirectoryPage() {
+  const router = useRouter()
   const [hasMounted, setHasMounted] = useState(false)
   const [members, setMembers] = useState<Member[]>([])
   const [searchQuery, setSearchQuery] = useState("")
@@ -99,6 +101,15 @@ export default function DirectoryPage() {
         className="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-2xl"
       >
         <div className="px-4 py-4">
+          <div className="flex items-center gap-3 mb-2 sm:mb-0">
+            <button
+              onClick={() => router.push("/")}
+              className="sm:hidden inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
+          </div>
           <h1 className="text-xl sm:text-2xl font-bold text-white mb-3">Directory</h1>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
