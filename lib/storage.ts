@@ -32,7 +32,10 @@ export interface Event {
 const STORAGE_KEYS = {
   MEMBERS: "tartan_talks_members",
   EVENTS: "tartan_talks_events",
+  VERSION: "tartan_talks_version", // add version tracking
 }
+
+const STORAGE_VERSION = "2"
 
 const DEMO_MEMBERS: Member[] = [
   {
@@ -2067,19 +2070,23 @@ const DEMO_MEMBERS: Member[] = [
 export function initStorage() {
   if (typeof window === "undefined") return
 
+  const storedVersion = localStorage.getItem(STORAGE_KEYS.VERSION)
   const existingMembers = localStorage.getItem(STORAGE_KEYS.MEMBERS)
   const existingEvents = localStorage.getItem(STORAGE_KEYS.EVENTS)
 
-  if (!existingMembers) {
+  const shouldRefresh = !storedVersion || storedVersion !== STORAGE_VERSION
+
+  if (!existingMembers || shouldRefresh) {
     localStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(DEMO_MEMBERS))
-    console.log(`[v0] ✅ Loaded ${DEMO_MEMBERS.length} members into localStorage`)
+    localStorage.setItem(STORAGE_KEYS.VERSION, STORAGE_VERSION)
+    console.log(`[v0] ✅ Loaded ${DEMO_MEMBERS.length} members into localStorage (v${STORAGE_VERSION})`)
 
     // Count unique trades
-    const uniqueTrades = new Set(DEMO_MEMBERS.map((m) => m.tradeOrBusinessType).filter(Boolean))
+    const uniqueTrades = new Set(DEMO_MEMBERS.map((m) => m.businessCategory).filter(Boolean))
     console.log(`[v0] ✅ Detected ${uniqueTrades.size} unique trades`)
   } else {
     const members = JSON.parse(existingMembers)
-    console.log(`[v0] ℹ️ Found existing ${members.length} members in localStorage`)
+    console.log(`[v0] ℹ️ Found existing ${members.length} members in localStorage (v${storedVersion})`)
   }
 
   if (!existingEvents) {
@@ -2144,6 +2151,7 @@ export function resetAppData() {
   if (typeof window === "undefined") return
   localStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(DEMO_MEMBERS))
   localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify([]))
+  localStorage.setItem(STORAGE_KEYS.VERSION, STORAGE_VERSION) // Ensure version is reset as well
 }
 
 export function generateId() {
