@@ -22,7 +22,17 @@ export default function RootLayout({
         <main className="leading-7 tracking-tighter">{children}</main>
         <footer className="pt-6 text-center pb-20 text-xs text-gray-500">
           <p>© 2026 Tartan Talks</p>
-          <p>Built by Bear Media</p>
+          <p>
+            Built by{" "}
+            <a
+              href="https://www.bear-media.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-500 hover:text-orange-600 transition underline"
+            >
+              Bear Media
+            </a>
+          </p>
         </footer>
         <FloatingNav />
       </body>

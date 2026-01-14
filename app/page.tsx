@@ -129,7 +129,7 @@ export default function HomePage() {
 
       {/* Tartan Footer Divider */}
       <div
-        className="h-12 bg-cover bg-center fixed bottom-0 left-0 right-0"
+        className="h-12 bg-cover bg-center relative"
         style={{
           backgroundImage: "url(/images/tartan.jpg)",
           backgroundPosition: "center bottom",
