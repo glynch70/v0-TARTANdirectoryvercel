@@ -27,7 +27,7 @@ export default function HomePage() {
       >
         <div className="relative z-10 flex justify-center mb-4">
           <Image
-            src="/images/tt-20logo.png"
+            src="/images/copy-20of-20tt-20logo.png"
             alt="Tartan Talks Logo"
             width={200}
             height={200}
