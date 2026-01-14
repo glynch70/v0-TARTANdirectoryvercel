@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { InitStorage } from "./components/init-storage"
 import { FloatingNav } from "./components/floating-nav"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Tartan Talks - Member Directory",
@@ -19,19 +20,19 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-apple antialiased bg-white">
         <InitStorage />
-        <main className="leading-7 tracking-tighter">{children}</main>
-        <footer className="pt-6 text-center pb-20 text-xs text-gray-500">
+        <main className="leading-7 tracking-tighter pb-40">{children}</main>
+        <footer className="text-center py-4 px-4 text-xs text-gray-500 mt-8">
           <p>© 2026 Tartan Talks</p>
           <p>
             Built by{" "}
-            <a
+            <Link
               href="https://www.bear-media.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-orange-500 hover:text-orange-600 transition underline"
+              className="text-blue-600 hover:underline"
             >
               Bear Media
-            </a>
+            </Link>
           </p>
         </footer>
         <FloatingNav />

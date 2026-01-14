@@ -15,7 +15,7 @@ export function FloatingNav() {
   ]
 
   return (
-    <nav className="fixed bottom-safe left-4 right-4 bg-white rounded-2xl shadow-lg border border-gray-200 z-50 md:max-w-md md:mx-auto">
+    <nav className="fixed bottom-4 left-4 right-4 bg-white rounded-2xl shadow-lg border border-gray-200 z-50 md:max-w-md md:mx-auto block opacity-100 pointer-events-auto">
       <div className="flex items-center justify-around px-2 py-3">
         {navItems.map((item) => {
           const Icon = item.icon
