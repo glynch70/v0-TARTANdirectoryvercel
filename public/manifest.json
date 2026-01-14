@@ -1,0 +1,21 @@
+{
+  "name": "BNI South East Scotland Directory",
+  "short_name": "BNI SE Scotland",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "description": "Directory of BNI South East Scotland members and their businesses",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+[
+  {
+    "name": "William Coleman",
+    "company": "Penta Home Solutions",
+    "category": "Property > Property (Other)",
+    "phone": "07415266112",
+    "chapter": "BNI Chapter",
+    "location": "Scotland"
+  },
+  {
+    "name": "Allan McLeish",
+    "company": "McLeish 365",
+    "category": "Property > Cleaning Services",
+    "phone": "07482 724783",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Anna Anderson",
+    "company": "Bridgend Golf & Footgolf",
+    "category": "Event & Business Services > Event Venue",
+    "phone": "01506 531003",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Brian Rudman",
+    "company": "MacAttack IT",
+    "category": "Computer > IT Support Services",
+    "phone": "07748 889556",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Callum McQueenie",
+    "company": "Time2Move (Scotland) Ltd",
+    "category": "Property > Estate Agent",
+    "phone": "07837 165584",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Debbie Douglas",
+    "company": "Capella Charity (Sleepaction)",
+    "category": "Organisations & Others > Charity",
+    "phone": "07976 458521",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Demi Lundie",
+    "company": "Car Click Collect",
+    "category": "Vehicle Services > Vehicle Repair",
+    "phone": "01501 747460",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Derek Mcgregor",
+    "company": "Mcgregor clean",
+    "category": "Vehicle Services > Vehicle/Car Wash",
+    "phone": "07385 261174",
+    "chapter": "Talk of the Town",
+    "location": "West Lothian"
+  },
+  {
+    "name": "Sarah Mitchell",
+    "company": "Edinburgh Legal Solutions",
+    "category": "Professional Services > Legal Services",
+    "phone": "0131 225 4567",
+    "chapter": "Edinburgh Central",
+    "location": "Edinburgh"
+  },
+  {
+    "name": "James Robertson",
+    "company": "Robertson Financial Planning",
+    "category": "Financial Services > Financial Planning",
+    "phone": "0131 334 8901",
+    "chapter": "Edinburgh Central",
+    "location": "Edinburgh"
+  },
+  {
+    "name": "Emma Thompson",
+    "company": "Capital Marketing Agency",
+    "category": "Marketing & Advertising > Digital Marketing",
+    "phone": "0131 447 2345",
+    "chapter": "Edinburgh Central",
+    "location": "Edinburgh"
+  },
+  {
+    "name": "David Wilson",
+    "company": "Wilson Construction Ltd",
+    "category": "Construction > General Building",
+    "phone": "01968 678901",
+    "chapter": "Borders Business",
+    "location": "Scottish Borders"
+  },
+  {
+    "name": "Lisa Campbell",
+    "company": "Campbell Accounting Services",
+    "category": "Financial Services > Accounting",
+    "phone": "01896 234567",
+    "chapter": "Borders Business",
+    "location": "Scottish Borders"
+  },
+  {
+    "name": "Michael Brown",
+    "company": "East Lothian Insurance Brokers",
+    "category": "Financial Services > Insurance",
+    "phone": "01620 345678",
+    "chapter": "East Coast Connect",
+    "location": "East Lothian"
+  },
+  {
+    "name": "Rachel Green",
+    "company": "Green Thumb Landscaping",
+    "category": "Property > Landscaping",
+    "phone": "01620 456789",
+    "chapter": "East Coast Connect",
+    "location": "East Lothian"
+  },
+  {
+    "name": "Andrew Scott",
+    "company": "Scott's Automotive Services",
+    "category": "Vehicle Services > Vehicle Repair",
+    "phone": "01875 567890",
+    "chapter": "East Coast Connect",
+    "location": "East Lothian"
+  }
+]

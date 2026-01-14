@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNI Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .results-count {
+            margin-bottom: 20px;
+            color: #64748b;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table thead {
+            background: #f8fafc;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .name-cell {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .category-cell {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .chapter-cell {
+            color: #dc2626;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .email-cell a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .email-cell a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .no-results h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .table-container {
+                border-radius: 8px;
+            }
+
+            .table th,
+            .table td {
+                padding: 12px 15px;
+            }
+
+            .table th {
+                font-size: 12px;
+            }
+
+            .table td {
+                font-size: 14px;
+            }
+
+            /* Stack table on very small screens */
+            @media (max-width: 480px) {
+                .table thead {
+                    display: none;
+                }
+
+                .table,
+                .table tbody,
+                .table tr,
+                .table td {
+                    display: block;
+                }
+
+                .table tr {
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    margin-bottom: 15px;
+                    padding: 15px;
+                    background: white;
+                }
+
+                .table td {
+                    border: none;
+                    padding: 8px 0;
+                    position: relative;
+                    padding-left: 100px;
+                }
+
+                .table td:before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 0;
+                    width: 90px;
+                    font-weight: 600;
+                    color: #374151;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #dc2626;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer a {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BNI Directory</h1>
+            <p>Connect with Business Network International members</p>
+        </div>
+
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Search by name, category, or chapter..."
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="results-count" id="resultsCount"></div>
+
+        <div class="table-container">
+            <table class="table" id="memberTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Chapter</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <div class="no-results" id="noResults" style="display: none;">
+                <div class="no-results-icon">🔍</div>
+                <h3>No members found</h3>
+                <p>Try adjusting your search terms</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 BNI Directory. All rights reserved. | Built by <a href="https://www.bear-media.com" target="_blank">Bear Media</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Sample BNI member data
+        const members = [
+            {
+                name: "Sarah Mitchell",
+                category: "Legal Services",
+                chapter: "Edinburgh Central",
+                email: "sarah.mitchell@lawfirm.co.uk"
+            },
+            {
+                name: "James Robertson",
+                category: "Financial Planning",
+                chapter: "Glasgow West",
+                email: "james@robertsonfinancial.com"
+            },
+            {
+                name: "Emma Thompson",
+                category: "Digital Marketing",
+                chapter: "Edinburgh Central",
+                email: "emma@capitalmarketing.co.uk"
+            },
+            {
+                name: "David Wilson",
+                category: "Construction",
+                chapter: "Stirling",
+                email: "david@wilsonconstruction.co.uk"
+            },
+            {
+                name: "Lisa Campbell",
+                category: "Accounting Services",
+                chapter: "Glasgow West",
+                email: "lisa@campbellaccounting.com"
+            },
+            {
+                name: "Michael Brown",
+                category: "Insurance Broker",
+                chapter: "Perth",
+                email: "michael@browninsurance.co.uk"
+            },
+            {
+                name: "Rachel Green",
+                category: "Landscaping",
+                chapter: "Edinburgh Central",
+                email: "rachel@greenthumblandscaping.com"
+            },
+            {
+                name: "Andrew Scott",
+                category: "Automotive Services",
+                chapter: "Dundee",
+                email: "andrew@scottsauto.co.uk"
+            },
+            {
+                name: "Claire Anderson",
+                category: "Web Design",
+                chapter: "Glasgow West",
+                email: "claire@andersondesign.co.uk"
+            },
+            {
+                name: "Robert Taylor",
+                category: "Property Management",
+                chapter: "Aberdeen",
+                email: "robert@taylorproperties.com"
+            },
+            {
+                name: "Allan McLeish",
+                category: "Cleaning Services",
+                chapter: "Talk of the Town",
+                email: "allan@mcleish365.co.uk"
+            },
+            {
+                name: "Anna Anderson",
+                category: "Event Venue",
+                chapter: "Talk of the Town",
+                email: "anna@bridgendgolf.co.uk"
+            },
+            {
+                name: "Brian Rudman",
+                category: "IT Support Services",
+                chapter: "Talk of the Town",
+                email: "brian@macattackit.co.uk"
+            },
+            {
+                name: "Callum McQueenie",
+                category: "Estate Agent",
+                chapter: "Talk of the Town",
+                email: "callum@time2move.co.uk"
+            },
+            {
+                name: "Debbie Douglas",
+                category: "Charity",
+                chapter: "Talk of the Town",
+                email: "debbie@capellacharity.org.uk"
+            }
+        ];
+
+        let filteredMembers = [...members];
+
+        // Sort members alphabetically by name on load
+        function sortMembersByName(memberArray) {
+            return memberArray.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        // Render table rows
+        function renderTable(memberArray) {
+            const tableBody = document.getElementById('tableBody');
+            const noResults = document.getElementById('noResults');
+            
+            if (memberArray.length === 0) {
+                tableBody.innerHTML = '';
+                noResults.style.display = 'block';
+                updateResultsCount(0);
+                return;
+            }
+
+            noResults.style.display = 'none';
+            
+            const html = memberArray.map(member => `
+                <tr class="fade-in">
+                    <td class="name-cell" data-label="Name">${member.name}</td>
+                    <td class="category-cell" data-label="Category">${member.category}</td>
+                    <td class="chapter-cell" data-label="Chapter">${member.chapter}</td>
+                    <td class="email-cell" data-label="Email">
+                        <a href="mailto:${member.email}">${member.email}</a>
+                    </td>
+                </tr>
+            `).join('');
+            
+            tableBody.innerHTML = html;
+            updateResultsCount(memberArray.length);
+        }
+
+        // Update results count
+        function updateResultsCount(count) {
+            const resultsCount = document.getElementById('resultsCount');
+            const total = members.length;
+            
+            if (count === total) {
+                resultsCount.textContent = `Showing all ${total} members`;
+            } else {
+                resultsCount.textContent = `Showing ${count} of ${total} members`;
+            }
+        }
+
+        // Filter members based on search input
+        function filterMembers(searchTerm) {
+            if (!searchTerm.trim()) {
+                filteredMembers = [...members];
+            } else {
+                const term = searchTerm.toLowerCase();
+                filteredMembers = members.filter(member => 
+                    member.name.toLowerCase().includes(term) ||
+                    member.category.toLowerCase().includes(term) ||
+                    member.chapter.toLowerCase().includes(term)
+                );
+            }
+            
+            // Always keep results sorted by name
+            filteredMembers = sortMembersByName(filteredMembers);
+            renderTable(filteredMembers);
+        }
+
+        // Debounce function to limit search frequency
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Initialize the app
+        function init() {
+            // Sort and render initial data
+            filteredMembers = sortMembersByName([...members]);
+            renderTable(filteredMembers);
+
+            // Set up search functionality with debouncing
+            const searchInput = document.getElementById('searchInput');
+            const debouncedFilter = debounce(filterMembers, 300);
+            
+            searchInput.addEventListener('input', (e) => {
+                debouncedFilter(e.target.value);
+            });
+
+            // Focus search input on page load
+            searchInput.focus();
+        }
+
+        // Start the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Focus search on Ctrl/Cmd + F
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            
+            // Clear search on Escape
+            if (e.key === 'Escape') {
+                const searchInput = document.getElementById('searchInput');
+                searchInput.value = '';
+                filterMembers('');
+                searchInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

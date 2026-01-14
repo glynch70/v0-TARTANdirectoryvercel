@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Tartan-inspired color palette */
+    --color-tartan-navy: 20 47 84;
+    --color-tartan-teal: 43 122 120;
+    --color-tartan-forest: 34 68 54;
+    --color-tartan-rust: 168 76 48;
+    --color-tartan-gold: 212 175 55;
+
+    /* UI colors */
+    --background: 250 250 250;
+    --foreground: 20 20 20;
+    --card: 255 255 255;
+    --card-foreground: 20 20 20;
+    --primary: 20 47 84;
+    --primary-foreground: 255 255 255;
+    --secondary: 43 122 120;
+    --secondary-foreground: 255 255 255;
+    --accent: 212 175 55;
+    --accent-foreground: 20 20 20;
+    --muted: 240 240 240;
+    --muted-foreground: 115 115 115;
+    --border: 230 230 230;
+    --radius: 16px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Prevent iOS zoom on input focus */
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .bento-card {
+    background-color: rgb(var(--card));
+    border-radius: var(--radius);
+    border-width: 1px;
+    border-color: rgb(var(--border));
+    padding: 1rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    transition-property: box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  /* Larger padding on desktop */
+  @media (min-width: 640px) {
+    .bento-card {
+      padding: 1.5rem;
+    }
+  }
+
+  .bento-card:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .bento-card-lg {
+    background-color: rgb(var(--card));
+    border-radius: var(--radius);
+    border-width: 1px;
+    border-color: rgb(var(--border));
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    transition-property: box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  /* Larger padding on desktop */
+  @media (min-width: 640px) {
+    .bento-card-lg {
+      padding: 2rem;
+    }
+  }
+
+  .bento-card-lg:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  /* Added Apple system font stack */
+  .font-apple {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  }
+}
+
+/* Apple system fonts as default */
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  /* Smooth momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Use Apple fonts for display headings */
+.font-display {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  font-weight: 700;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced mobile optimizations */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+  /* Prevent iOS zoom on input focus */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Touch-friendly tap highlights */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Safe area padding for notched devices */
+@supports (padding: max(0px)) {
+  .container {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
