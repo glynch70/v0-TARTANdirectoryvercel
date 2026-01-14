@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { Search, MapPin, Loader2, Building2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
 interface Member {
@@ -67,79 +68,98 @@ export default function DirectoryPage() {
 
   if (!hasMounted) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-[rgb(20,47,84)] animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading directory...</p>
+          <Loader2 className="w-12 h-12 text-amber-500 animate-spin mx-auto mb-4" />
+          <p className="text-slate-300">Loading directory...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Sticky Search Bar */}
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
+      <motion.div 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="sticky top-0 z-40 backdrop-blur-xl bg-slate-900/80 border-b border-white/10 shadow-2xl"
+      >
         <div className="px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-900 mb-3">Directory</h1>
+          <h1 className="text-2xl font-bold text-white mb-3">Directory</h1>
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="search"
               placeholder="Search name, trade, company..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[rgb(20,47,84)] focus:border-transparent"
+              className="w-full pl-12 pr-4 py-4 text-base bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20"
               style={{ fontSize: "16px" }}
             />
           </div>
-          <div className="mt-2 text-sm text-gray-600">
+          <div className="mt-2 text-sm text-slate-400">
             {filteredMembers.length} {filteredMembers.length === 1 ? "member" : "members"}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Member Cards */}
       <div className="px-4 py-4 space-y-4">
-        {filteredMembers.length > 0 ? (
-          filteredMembers.map((member) => (
-            <Link
-              key={member.id}
-              href={`/directory/${member.id}`}
-              className="block bg-white border-2 border-gray-200 rounded-xl p-5 active:scale-[0.98] transition-transform"
+        <AnimatePresence mode="popLayout">
+          {filteredMembers.length > 0 ? (
+            filteredMembers.map((member, index) => (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ delay: index * 0.03 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link
+                  href={`/directory/${member.id}`}
+                  className="block bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 shadow-xl hover:bg-white/10 transition-colors"
+                >
+                  {/* Trade Badge */}
+                  <div className="mb-3">
+                    <span className="inline-block px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm font-semibold rounded-lg shadow-lg">
+                      {member.serviceDescription || member.tradeOrBusinessType}
+                    </span>
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="text-xl font-bold text-white mb-1">
+                    {member.firstName} {member.lastName}
+                  </h3>
+
+                  {/* Company */}
+                  <div className="flex items-start gap-2 mb-2">
+                    <Building2 className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
+                    <p className="text-slate-300 font-medium">{member.company}</p>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm">{member.location}</span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-12 text-center"
             >
-              {/* Trade - Most Prominent */}
-              <div className="mb-3">
-                <span className="inline-block px-3 py-1.5 bg-[rgb(20,47,84)] text-white text-sm font-semibold rounded-lg">
-                  {member.serviceDescription || member.tradeOrBusinessType}
-                </span>
-              </div>
-
-              {/* Name */}
-              <h3 className="text-xl font-bold text-gray-900 mb-1">
-                {member.firstName} {member.lastName}
-              </h3>
-
-              {/* Company */}
-              <div className="flex items-start gap-2 mb-2">
-                <Building2 className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
-                <p className="text-gray-700 font-medium">{member.company}</p>
-              </div>
-
-              {/* Location */}
-              <div className="flex items-center gap-2 text-gray-600">
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm">{member.location}</span>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <div className="bg-gray-50 rounded-xl p-12 text-center">
-            <Search className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No members found</h3>
-            <p className="text-gray-600">Try a different search term</p>
-          </div>
-        )}
+              <Search className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">No members found</h3>
+              <p className="text-slate-400">Try a different search term</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
