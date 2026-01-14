@@ -47,24 +47,37 @@ export default function DirectoryPage() {
   }, [])
 
   const filteredMembers = useMemo(() => {
+    if (!hasMounted || !members || members.length === 0) {
+      return []
+    }
+
     let filtered = members.filter((m) => m.status === "active")
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(
-        (member) =>
-          member.firstName.toLowerCase().includes(query) ||
-          member.lastName.toLowerCase().includes(query) ||
-          member.company.toLowerCase().includes(query) ||
-          member.serviceDescription.toLowerCase().includes(query) ||
-          member.tradeOrBusinessType.toLowerCase().includes(query) ||
-          member.businessCategory.toLowerCase().includes(query) ||
-          member.location.toLowerCase().includes(query),
-      )
+      filtered = filtered.filter((member) => {
+        const firstName = String(member.firstName || "").toLowerCase()
+        const lastName = String(member.lastName || "").toLowerCase()
+        const company = String(member.company || "").toLowerCase()
+        const description = String(member.serviceDescription || "").toLowerCase()
+        const trade = String(member.tradeOrBusinessType || "").toLowerCase()
+        const category = String(member.businessCategory || "").toLowerCase()
+        const location = String(member.location || "").toLowerCase()
+
+        return (
+          firstName.includes(query) ||
+          lastName.includes(query) ||
+          company.includes(query) ||
+          description.includes(query) ||
+          trade.includes(query) ||
+          category.includes(query) ||
+          location.includes(query)
+        )
+      })
     }
 
     return filtered
-  }, [members, searchQuery])
+  }, [hasMounted, members, searchQuery])
 
   if (!hasMounted) {
     return (
