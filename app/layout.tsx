@@ -25,8 +25,8 @@ export default function RootLayout({
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
       </head>
-      <body className="font-apple antialiased bg-white">
-        <main className="leading-7 tracking-tighter pb-40">{children}</main>
+      <body className="font-apple antialiased bg-slate-950">
+        <main className="leading-7 tracking-tighter min-h-screen">{children}</main>
         <FloatingNav />
         <Toaster />
       </body>

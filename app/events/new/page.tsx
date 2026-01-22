@@ -4,7 +4,9 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { saveEvent, generateId } from "@/lib/storage"
+// MOCK DATA FOR BUILD - TODO: Replace with Supabase
+const generateId = () => Math.random().toString(36).substr(2, 9)
+const saveEvent = (event: any) => { }
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 

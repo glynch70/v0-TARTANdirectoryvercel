@@ -2,8 +2,32 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { getEvents, getMembers, saveEvent, deleteEvent } from "@/lib/storage"
-import type { Event, Member } from "@/lib/storage"
+// MOCK DATA FOR BUILD - TODO: Replace with Supabase
+interface Event {
+  id: string
+  title: string
+  date: string
+  location: string
+  description?: string
+  attendeeIds: string[]
+}
+
+interface Member {
+  id: string
+  firstName: string
+  lastName: string
+  company: string
+  trade: string
+  email: string
+  phone: string
+  website: string
+  joinedDate: string
+}
+
+const getEvents = (): Event[] => []
+const getMembers = (): Member[] => []
+const saveEvent = (event: Event) => { }
+const deleteEvent = (id: string) => { }
 import { Calendar, MapPin, Users, ArrowLeft, Trash2, UserPlus } from "lucide-react"
 import Link from "next/link"
 

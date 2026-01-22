@@ -27,7 +27,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <section className="relative w-full h-[50vh] overflow-hidden flex flex-col">
         {/* Background image */}
         <Image
@@ -47,7 +47,7 @@ export default function HomePage() {
         />
 
         {/* Dark overlay at bottom for readability */}
-        <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
+        <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10" />
 
         {/* Header Actions - Top Right */}
         <div className="absolute top-4 right-4 z-50">
@@ -71,7 +71,7 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-[rgb(20,47,84)]">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-sidebar-accent">
               Tartan Talks
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-white tracking-wider mt-3 font-light drop-shadow-lg">
@@ -81,7 +81,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[rgb(20,47,84)] px-4 py-12">
+      <section className="bg-transparent px-4 py-12">
         <div className="max-w-2xl mx-auto space-y-4">
           {/* Browse Directory Card */}
           <motion.div
@@ -93,21 +93,21 @@ export default function HomePage() {
           >
             <Link
               href="/directory"
-              className="block bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl p-6 shadow-xl hover:bg-white/20 transition-all group"
+              className="block bg-slate-800/50 backdrop-blur-sm border-2 border-slate-700 rounded-2xl p-6 shadow-xl hover:bg-slate-800/80 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center">
                     <Users className="w-8 h-8 text-white" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-1">Browse Directory</h2>
-                    <p className="text-white/80">
+                    <p className="text-slate-300">
                       Find trusted members, search by trade, and connect with businesses in your area.
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="w-8 h-8 text-white/60 group-hover:text-white transition-colors flex-shrink-0" />
+                <ChevronRight className="w-8 h-8 text-slate-400 group-hover:text-white transition-colors flex-shrink-0" />
               </div>
             </Link>
           </motion.div>
@@ -122,21 +122,21 @@ export default function HomePage() {
           >
             <Link
               href="/trades"
-              className="block bg-gradient-to-br from-teal-600 to-teal-700 border-2 border-teal-400/30 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all group"
+              className="block bg-gradient-to-br from-teal-900/80 to-teal-800/80 border-2 border-teal-700/50 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-teal-800/50 rounded-full flex items-center justify-center">
                     <Building2 className="w-8 h-8 text-white" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-1">Explore Trades</h2>
-                    <p className="text-white/90">
+                    <p className="text-teal-100/90">
                       Browse categories and discover professionals organized by their specialties.
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="w-8 h-8 text-white/60 group-hover:text-white transition-colors flex-shrink-0" />
+                <ChevronRight className="w-8 h-8 text-teal-200/60 group-hover:text-white transition-colors flex-shrink-0" />
               </div>
             </Link>
           </motion.div>
@@ -148,29 +148,29 @@ export default function HomePage() {
             animate="animate"
             whileHover="hover"
             transition={{ delay: 0.6 }}
-            className="bg-gradient-to-br from-amber-500 to-orange-600 border-2 border-amber-400/30 rounded-2xl p-6 shadow-xl"
+            className="bg-gradient-to-br from-amber-600/90 to-orange-700/90 border-2 border-amber-600/50 rounded-2xl p-6 shadow-xl"
           >
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-16 h-16 bg-amber-700/50 rounded-full flex items-center justify-center flex-shrink-0">
                 <UserPlus className="w-8 h-8 text-white" />
               </div>
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-white mb-2">Refer a Friend</h2>
-                <p className="text-white/90 mb-4">
+                <p className="text-amber-100/90 mb-4">
                   Know someone who'd be perfect for Tartan Talks? Get in touch with Mark Innes, Founder and Host, to
                   make a referral.
                 </p>
                 <div className="space-y-2">
                   <a
                     href="mailto:mark@tartantimber.com"
-                    className="flex items-center gap-2 text-white hover:text-white/80 transition-colors"
+                    className="flex items-center gap-2 text-white hover:text-amber-200 transition-colors"
                   >
                     <Mail className="w-5 h-5" />
                     <span className="font-medium">mark@tartantimber.com</span>
                   </a>
                   <a
                     href="tel:07769677121"
-                    className="flex items-center gap-2 text-white hover:text-white/80 transition-colors"
+                    className="flex items-center gap-2 text-white hover:text-amber-200 transition-colors"
                   >
                     <Phone className="w-5 h-5" />
                     <span className="font-medium">07769 677121</span>
@@ -189,16 +189,16 @@ export default function HomePage() {
                 icon: Users,
                 title: "Professional Network",
                 desc: "Vetted local businesses",
-                color: "from-blue-500 to-indigo-600",
+                color: "from-blue-600 to-indigo-700",
               },
               {
                 icon: Building2,
                 title: "Local Trades",
                 desc: "Trusted services nearby",
-                color: "from-teal-500 to-cyan-600",
+                color: "from-teal-600 to-cyan-700",
               },
-              { icon: Phone, title: "Direct Contact", desc: "Quick responses", color: "from-amber-500 to-orange-600" },
-              { icon: MapPin, title: "Regional", desc: "Edinburgh & Lothians", color: "from-emerald-500 to-teal-600" },
+              { icon: Phone, title: "Direct Contact", desc: "Quick responses", color: "from-amber-600 to-orange-700" },
+              { icon: MapPin, title: "Regional", desc: "Edinburgh & Lothians", color: "from-emerald-600 to-teal-700" },
             ].map((item, index) => (
               <motion.div
                 key={item.title}
@@ -207,15 +207,15 @@ export default function HomePage() {
                 animate="animate"
                 whileHover="hover"
                 transition={{ delay: 0.7 + index * 0.1 }}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-5 text-center"
+                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 text-center"
               >
                 <div
-                  className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center mx-auto mb-3`}
+                  className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg`}
                 >
                   <item.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1">{item.title}</h3>
-                <p className="text-xs text-white/80">{item.desc}</p>
+                <p className="text-xs text-slate-300">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -223,10 +223,10 @@ export default function HomePage() {
       </section>
 
       {/* Community Section */}
-      <section className="bg-gray-50 py-16 px-4">
+      <section className="bg-slate-900/50 py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8">Our Community</h2>
-          <p className="text-lg text-gray-700 text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-8 text-white">Our Community</h2>
+          <p className="text-lg text-slate-300 text-center mb-12">
             Tartan Talks brings together business owners, trades professionals, and service providers across Edinburgh
             and the Lothians. Our members are committed to quality service and building lasting business relationships.
           </p>
@@ -243,10 +243,10 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 + index * 0.1 }}
-                className="bg-white p-6 rounded-lg shadow-md"
+                className="bg-slate-800 border border-slate-700 p-6 rounded-lg shadow-md"
               >
-                <h3 className="font-bold text-lg mb-2">{location.title}</h3>
-                <p className="text-gray-600 text-sm">{location.desc}</p>
+                <h3 className="font-bold text-lg mb-2 text-white">{location.title}</h3>
+                <p className="text-slate-400 text-sm">{location.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -254,9 +254,9 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[rgb(20,47,84)] text-white py-8 px-4 pb-28">
+      <footer className="bg-transparent text-slate-400 py-8 px-4 pb-8">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-white/80">© 2026 Tartan Talks. All rights reserved.</p>
+          <p className="text-slate-500">© 2026 Tartan Talks. All rights reserved.</p>
         </div>
       </footer>
     </div>
