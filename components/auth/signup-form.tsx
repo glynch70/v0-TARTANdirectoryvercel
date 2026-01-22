@@ -42,15 +42,15 @@ export function SignupForm() {
     }
 
     return (
-        <Card className="w-full max-w-md mx-auto">
+        <Card className="w-full max-w-md mx-auto bg-slate-800/50 border-slate-700 backdrop-blur-sm text-white">
             <CardHeader>
-                <CardTitle>Sign Up</CardTitle>
-                <CardDescription>Create an account to join the network</CardDescription>
+                <CardTitle className="text-2xl text-center text-white">Sign Up</CardTitle>
+                <CardDescription className="text-center text-slate-400">Create an account to join the network</CardDescription>
             </CardHeader>
             <form onSubmit={handleSignup}>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email" className="text-slate-300">Email</Label>
                         <Input
                             id="email"
                             type="email"
@@ -58,27 +58,32 @@ export function SignupForm() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password" className="text-slate-300">Password</Label>
                         <Input
                             id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            className="bg-slate-900/50 border-slate-600 text-white"
                         />
                     </div>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
-                    <Button type="submit" className="w-full" disabled={loading}>
+                    <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold" disabled={loading}>
                         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Sign Up
                     </Button>
-                    <div className="text-sm text-center text-muted-foreground">
-                        Already have an account?{' '}
-                        <Link href="/login" className="text-primary hover:underline">
+                    <div className="w-full flex flex-col items-center gap-2">
+                        <span className="text-sm text-slate-400">Already have an account?</span>
+                        <Link
+                            href="/login"
+                            className="flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium text-white transition-colors bg-orange-400 hover:bg-orange-500 rounded-md"
+                        >
                             Login
                         </Link>
                     </div>

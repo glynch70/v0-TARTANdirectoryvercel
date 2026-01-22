@@ -41,8 +41,8 @@ export function LoginForm() {
     return (
         <Card className="w-full max-w-md mx-auto bg-slate-800/50 border-slate-700 backdrop-blur-sm">
             <CardHeader>
-                <CardTitle className="text-white">Login</CardTitle>
-                <CardDescription className="text-slate-400">Enter your credentials to access your account</CardDescription>
+                <CardTitle className="text-2xl text-center text-white">Login</CardTitle>
+                <CardDescription className="text-center text-slate-400">Enter your credentials to access your account</CardDescription>
             </CardHeader>
             <form onSubmit={handleLogin}>
                 <CardContent className="space-y-4">
