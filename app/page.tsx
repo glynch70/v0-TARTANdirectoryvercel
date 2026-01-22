@@ -1,11 +1,25 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { Users, Building2, Phone, MapPin, ChevronRight, UserPlus, Mail } from "lucide-react"
+import { Users, Building2, Phone, MapPin, ChevronRight, UserPlus, Mail, LogIn } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { SignOutButton } from "@/components/auth/sign-out-button"
+import { User } from "@supabase/supabase-js"
+
 
 export default function HomePage() {
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+    })
+  }, [])
+
   const cardVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -14,13 +28,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="relative w-full h-screen overflow-hidden flex flex-col">
+      <section className="relative w-full h-[50vh] overflow-hidden flex flex-col">
         {/* Background image */}
         <Image
           src="/images/lunch-atop-a-skyscraper-charles-clyde-ebbets.jpg"
           alt="Workers on skyscraper"
           fill
-          className="object-cover"
+          className="object-contain"
           priority
         />
 
@@ -35,6 +49,21 @@ export default function HomePage() {
         {/* Dark overlay at bottom for readability */}
         <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
 
+        {/* Header Actions - Top Right */}
+        <div className="absolute top-4 right-4 z-50">
+          {user ? (
+            <SignOutButton className="bg-white/90 backdrop-blur shadow-sm hover:bg-white text-red-600" />
+          ) : (
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[rgb(20,47,84)] bg-white/90 backdrop-blur shadow-sm hover:bg-white rounded-lg transition-colors"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Login</span>
+            </Link>
+          )}
+        </div>
+
         {/* Hero content positioned at BOTTOM below the men */}
         <div className="relative z-30 mt-auto mb-20 text-center px-5">
           <motion.div
@@ -42,7 +71,7 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-sidebar-accent">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-[rgb(20,47,84)]">
               Tartan Talks
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-white tracking-wider mt-3 font-light drop-shadow-lg">

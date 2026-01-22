@@ -2,21 +2,22 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Phone, Mail, MapPin, ExternalLink, Building2, User, ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 interface Member {
-  id: string
-  firstName: string
-  lastName: string
+  member_id: string
+  first_name: string
+  last_name: string
   email: string
   phone: string
   company: string
-  tradeOrBusinessType: string
+  trade: string
   location: string
-  membershipType: string
+  membership_type: string
   status: string
-  joinDate: string
+  join_date: string
   tags: string[]
   website?: string
   notes?: string
@@ -29,13 +30,19 @@ export default function MemberProfilePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const loadMember = () => {
+    const fetchMember = async () => {
+      const supabase = createClient()
       try {
-        const stored = localStorage.getItem("tartan_talks_members")
-        if (stored) {
-          const members: Member[] = JSON.parse(stored)
-          const foundMember = members.find((m) => m.id === params.id)
-          setMember(foundMember || null)
+        const { data, error } = await supabase
+          .from('members')
+          .select('*')
+          .eq('member_id', params.id)
+          .single()
+
+        if (error) {
+          console.error("Error fetching member:", error)
+        } else if (data) {
+          setMember(data as Member)
         }
       } catch (error) {
         console.error("Failed to load member:", error)
@@ -44,7 +51,7 @@ export default function MemberProfilePage() {
       }
     }
 
-    loadMember()
+    fetchMember()
   }, [params.id])
 
   if (loading) {
@@ -96,13 +103,13 @@ export default function MemberProfilePage() {
           {/* Trade Badge */}
           <div className="mb-6">
             <span className="inline-block px-4 py-2 bg-[rgb(20,47,84)] text-white font-semibold rounded-lg">
-              {member.tradeOrBusinessType}
+              {member.trade}
             </span>
           </div>
 
           {/* Name and Company */}
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            {member.firstName} {member.lastName}
+            {member.first_name} {member.last_name}
           </h1>
           <div className="flex items-center gap-2 text-xl text-gray-700 mb-6">
             <Building2 className="w-5 h-5 text-gray-400" />
@@ -200,7 +207,7 @@ export default function MemberProfilePage() {
                   <User className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Membership Type</p>
-                    <p className="text-gray-900">{member.membershipType}</p>
+                    <p className="text-gray-900">{member.membership_type}</p>
                   </div>
                 </div>
               </div>

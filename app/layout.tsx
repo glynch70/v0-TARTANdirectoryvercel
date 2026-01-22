@@ -1,8 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
 import "./globals.css"
-import { InitStorage } from "./components/init-storage"
 import { FloatingNav } from "./components/floating-nav"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "Tartan Talks - Member Directory",
@@ -26,9 +26,9 @@ export default function RootLayout({
         <meta httpEquiv="Expires" content="0" />
       </head>
       <body className="font-apple antialiased bg-white">
-        <InitStorage />
         <main className="leading-7 tracking-tighter pb-40">{children}</main>
         <FloatingNav />
+        <Toaster />
       </body>
     </html>
   )

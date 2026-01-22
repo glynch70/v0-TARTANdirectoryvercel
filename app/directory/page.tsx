@@ -2,25 +2,21 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Search, MapPin, Loader2, Building2, ArrowLeft } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
 interface Member {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  company: string
-  businessCategory: string
-  serviceDescription: string
-  tradeOrBusinessType: string
-  location: string
-  membershipType: string
+  member_id: string
+  first_name: string
+  last_name: string
+  company: string | null
+  trade: string | null
+  location: string | null
   status: string
-  tags: string[]
-  website?: string
+  category: string | null
+  website: string | null
 }
 
 export default function DirectoryPage() {
@@ -30,13 +26,19 @@ export default function DirectoryPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    const loadMembers = () => {
+    const fetchMembers = async () => {
+      const supabase = createClient()
       try {
-        const stored = localStorage.getItem("tartan_talks_members")
-        if (stored) {
-          const parsedMembers = JSON.parse(stored)
-          console.log("[v0] Loaded members count:", parsedMembers.length)
-          setMembers(parsedMembers)
+        const { data, error } = await supabase
+          .from('members')
+          .select('*')
+          .eq('status', 'Active')
+
+        if (error) {
+          console.error('Error fetching members:', error)
+        } else if (data) {
+          // @ts-ignore - Supabase return types match but casing differs from old interface if not careful
+          setMembers(data as Member[])
         }
       } catch (error) {
         console.error("Failed to load members:", error)
@@ -45,7 +47,7 @@ export default function DirectoryPage() {
       }
     }
 
-    loadMembers()
+    fetchMembers()
   }, [])
 
   const filteredMembers = useMemo(() => {
@@ -53,24 +55,22 @@ export default function DirectoryPage() {
       return []
     }
 
-    let filtered = members.filter((m) => m.status === "active")
+    let filtered = members
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter((member) => {
-        const firstName = String(member.firstName || "").toLowerCase()
-        const lastName = String(member.lastName || "").toLowerCase()
+        const firstName = String(member.first_name || "").toLowerCase()
+        const lastName = String(member.last_name || "").toLowerCase()
         const company = String(member.company || "").toLowerCase()
-        const description = String(member.serviceDescription || "").toLowerCase()
-        const trade = String(member.tradeOrBusinessType || "").toLowerCase()
-        const category = String(member.businessCategory || "").toLowerCase()
+        const trade = String(member.trade || "").toLowerCase()
+        const category = String(member.category || "").toLowerCase()
         const location = String(member.location || "").toLowerCase()
 
         return (
           firstName.includes(query) ||
           lastName.includes(query) ||
           company.includes(query) ||
-          description.includes(query) ||
           trade.includes(query) ||
           category.includes(query) ||
           location.includes(query)
@@ -134,7 +134,7 @@ export default function DirectoryPage() {
           {filteredMembers.length > 0 ? (
             filteredMembers.map((member, index) => (
               <motion.div
-                key={member.id}
+                key={member.member_id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -143,19 +143,19 @@ export default function DirectoryPage() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
-                  href={`/directory/${member.id}`}
+                  href={`/directory/${member.member_id}`}
                   className="block bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md sm:shadow-xl hover:bg-slate-700/80 hover:border-white/20 transition-all duration-200"
                 >
                   {/* Trade Badge - responsive sizing */}
                   <div className="mb-3">
                     <span className="inline-block px-2.5 sm:px-3 py-1 sm:py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs sm:text-sm font-semibold rounded-md sm:rounded-lg shadow-lg">
-                      {member.serviceDescription || member.tradeOrBusinessType}
+                      {member.trade || 'Member'}
                     </span>
                   </div>
 
                   {/* Name - responsive text sizing */}
                   <h3 className="text-lg sm:text-xl font-bold text-white mb-1 line-clamp-2">
-                    {member.firstName} {member.lastName}
+                    {member.first_name} {member.last_name}
                   </h3>
 
                   {/* Company */}
