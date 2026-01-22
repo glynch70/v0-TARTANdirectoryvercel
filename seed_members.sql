@@ -1,5 +1,4 @@
-
-    INSERT INTO members (member_id, first_name, last_name, company, trade, phone, email, website, location, category, status, join_date)
+INSERT INTO members (member_id, first_name, last_name, company, trade, phone, email, website, location, category, status, join_date)
     VALUES (
         gen_random_uuid(),
         'Connor',
