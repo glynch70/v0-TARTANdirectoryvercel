@@ -32,10 +32,13 @@ export type Database = {
           email: string | null
           phone: string | null
           company: string | null
-          role: string | null
+          trade: string | null
           location: string | null
+          category: string | null
           membership_type: string | null
           status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           join_date: string | null
           renewal_date: string | null
           events_attended: number

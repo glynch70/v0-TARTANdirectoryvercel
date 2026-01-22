@@ -1,8 +1,30 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getEvents, getMembers } from "@/lib/storage"
-import type { Event, Member } from "@/lib/storage"
+// MOCK DATA FOR BUILD - TODO: Replace with Supabase
+interface Event {
+  id: string
+  title: string
+  date: string
+  location: string
+  description?: string
+  attendeeIds: string[]
+}
+
+interface Member {
+  id: string
+  firstName: string
+  lastName: string
+  company: string
+  trade: string
+  email: string
+  phone: string
+  website: string
+  joinedDate: string
+}
+
+const getEvents = (): Event[] => []
+const getMembers = (): Member[] => []
 import { Calendar, MapPin, Users, Plus } from "lucide-react"
 import Link from "next/link"
 

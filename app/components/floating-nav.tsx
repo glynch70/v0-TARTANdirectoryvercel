@@ -8,10 +8,10 @@ export function FloatingNav() {
   const pathname = usePathname()
 
   const navItems = [
-    { href: "/", icon: Home, label: "Home" },
+    { href: "/dashboard", icon: Home, label: "Home" },
     { href: "/trades", icon: Grid3x3, label: "Trades" },
     { href: "/directory", icon: Search, label: "Directory" },
-    { href: "/about", icon: Info, label: "About" },
+    { href: "/profile", icon: Info, label: "Profile" },
   ]
 
   return (
@@ -24,9 +24,8 @@ export function FloatingNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${
-                isActive ? "bg-[rgb(20,47,84)] text-white" : "text-gray-600 hover:bg-gray-100 active:scale-95"
-              }`}
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${isActive ? "bg-[rgb(20,47,84)] text-white" : "text-gray-600 hover:bg-gray-100 active:scale-95"
+                }`}
             >
               <Icon className="w-5 h-5" />
               <span className="text-xs font-medium">{item.label}</span>

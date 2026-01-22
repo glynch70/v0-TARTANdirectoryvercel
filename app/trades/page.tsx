@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import {
   Users,
   Loader2,
@@ -19,13 +20,12 @@ import {
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Member {
-  id: string
-  firstName: string
-  lastName: string
-  company: string
-  businessCategory: string
-  serviceDescription: string
-  tradeOrBusinessType: string
+  member_id: string
+  first_name: string
+  last_name: string
+  company: string | null
+  category: string | null
+  trade: string | null
   status: string
 }
 
@@ -58,26 +58,34 @@ export default function TradesPage() {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("tartan_talks_members")
-      if (stored) {
-        const loadedMembers = JSON.parse(stored)
-        console.log("[v0] Loaded members for trades:", loadedMembers.length)
-        setMembers(loadedMembers)
+    const fetchMembers = async () => {
+      const supabase = createClient()
+      try {
+        const { data, error } = await supabase
+          .from('members')
+          .select('*')
+          .eq('status', 'Active')
+
+        if (error) {
+          console.error('Error fetching members:', error)
+        } else if (data) {
+          // @ts-ignore - Supabase types are strict
+          setMembers(data as Member[])
+        }
+      } catch (error) {
+        console.error("Failed to load members:", error)
+      } finally {
+        setHasMounted(true)
       }
-    } catch (error) {
-      console.error("Failed to load members:", error)
-    } finally {
-      setHasMounted(true)
     }
+
+    fetchMembers()
   }, [])
 
   const categorizedMembers = useMemo(() => {
-    const activeMembers = members.filter((m) => m.status === "active")
-
-    const grouped = activeMembers.reduce(
+    const grouped = members.reduce(
       (acc, member) => {
-        const category = member.businessCategory || "Other Services"
+        const category = member.category || "Other Services"
         if (!acc[category]) {
           acc[category] = []
         }
@@ -111,7 +119,7 @@ export default function TradesPage() {
     )
   }
 
-  const totalMembers = members.filter((m) => m.status === "active").length
+  const totalMembers = members.length
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -187,11 +195,11 @@ export default function TradesPage() {
                   >
                     {group.members.map((member, memberIndex) => (
                       <motion.button
-                        key={member.id}
+                        key={member.member_id}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: memberIndex * 0.03 }}
-                        onClick={() => router.push(`/directory/${member.id}`)}
+                        onClick={() => router.push(`/directory/${member.member_id}`)}
                         className="w-full px-5 py-4 border-b border-white/10 last:border-b-0 hover:bg-white/10 transition-colors text-left"
                         whileHover={{ x: 5 }}
                       >
@@ -199,11 +207,11 @@ export default function TradesPage() {
                           <span
                             className={`inline-block px-2.5 py-1 bg-gradient-to-r ${colorClass} text-white text-xs font-semibold rounded`}
                           >
-                            {member.serviceDescription || member.tradeOrBusinessType}
+                            {member.trade || 'Member'}
                           </span>
                         </div>
                         <h3 className="font-bold text-white mb-1">
-                          {member.firstName} {member.lastName}
+                          {member.first_name} {member.last_name}
                         </h3>
                         <p className="text-sm text-slate-400">{member.company}</p>
                       </motion.button>

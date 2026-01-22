@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Users, Target, Heart, Phone, Linkedin, ArrowLeft } from "lucide-react"
+import { Users, Target, Heart, Phone, Linkedin, ArrowLeft, Mail } from "lucide-react"
 import { motion } from "framer-motion"
 
 export default function AboutPage() {
@@ -95,7 +95,7 @@ export default function AboutPage() {
           ))}
         </section>
 
-        {/* Coverage */}
+        {/* Coverage - Added Midlothian and Scottish Borders */}
         <section>
           <h2 className="text-xl font-bold text-white mb-4">Our Coverage</h2>
           <div className="space-y-3">
@@ -103,6 +103,8 @@ export default function AboutPage() {
               { title: "Edinburgh", desc: "Scotland's capital and our largest member community" },
               { title: "West Lothian", desc: "Livingston, Bathgate, Linlithgow, and surrounding areas" },
               { title: "East Lothian", desc: "Haddington, North Berwick, Dunbar, and more" },
+              { title: "Midlothian", desc: "Dalkeith, Penicuik, Bonnyrigg, and surrounding areas" },
+              { title: "Scottish Borders", desc: "Galashiels, Kelso, Peebles, and border communities" },
             ].map((area, index) => (
               <motion.div
                 key={area.title}
@@ -119,47 +121,54 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Founder */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-gradient-to-br from-amber-500/10 to-orange-600/10 backdrop-blur-sm border border-amber-500/20 rounded-xl p-6 shadow-xl"
+          className="bg-gradient-to-br from-teal-500/10 to-cyan-600/10 backdrop-blur-sm border border-teal-500/20 rounded-xl p-6 shadow-xl"
         >
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-              <Linkedin className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
+              <Users className="w-8 h-8 text-white" />
             </div>
             <div>
               <h3 className="text-xl font-bold text-white">Mark Innes</h3>
-              <p className="text-amber-400">Founder & Owner</p>
+              <p className="text-teal-400">Founder and Host</p>
             </div>
           </div>
           <p className="text-slate-300 leading-relaxed mb-4">
-            Connect with Mark on LinkedIn to learn more about Tartan Talks and membership opportunities.
+            Get in touch with Mark for membership enquiries, referrals, or to learn more about joining Tartan Talks.
           </p>
-          <a
-            href="https://www.linkedin.com/in/tartantimber/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-amber-500/50 transition-shadow"
-          >
-            <Linkedin className="w-5 h-5" />
-            Connect on LinkedIn
-          </a>
+          <div className="space-y-2">
+            <a
+              href="mailto:mark@tartantimber.com"
+              className="flex items-center gap-2 text-teal-400 hover:text-teal-300 transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              <span className="text-sm font-medium">mark@tartantimber.com</span>
+            </a>
+            <a
+              href="tel:07769677121"
+              className="flex items-center gap-2 text-teal-400 hover:text-teal-300 transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span className="text-sm font-medium">07769 677121</span>
+            </a>
+          </div>
         </motion.section>
+
+        
 
         {/* Connect with Tartan Talks */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85 }}
+          transition={{ delay: 0.95 }}
           className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-xl"
         >
           <h2 className="text-xl font-bold text-white mb-6">Connect with Tartan Talks</h2>
 
           <div className="space-y-4 mb-6">
-            {/* Website and Eventbrite links */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <a
                 href="https://tartantalks.co.uk/"
@@ -181,7 +190,6 @@ export default function AboutPage() {
               </a>
             </div>
 
-            {/* Social links */}
             <div>
               <p className="text-sm text-slate-400 mb-3">Follow us on social media</p>
               <div className="flex gap-3 flex-wrap">
@@ -225,7 +233,7 @@ export default function AboutPage() {
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 1.0 }}
           whileHover={{ scale: 1.02 }}
           className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 backdrop-blur-sm border border-white/10 text-white rounded-xl p-6 text-center shadow-xl"
         >

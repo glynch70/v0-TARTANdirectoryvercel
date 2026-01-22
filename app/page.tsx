@@ -1,140 +1,264 @@
 "use client"
 
-import { Users, Briefcase, Info, Mail, Linkedin, ArrowRight } from "lucide-react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion } from "framer-motion"
+import { Users, Building2, Phone, MapPin, ChevronRight, UserPlus, Mail, LogIn } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { SignOutButton } from "@/components/auth/sign-out-button"
+import { User } from "@supabase/supabase-js"
+
 
 export default function HomePage() {
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Tartan Header Divider */}
-      <div
-        className="h-12 bg-cover bg-center"
-        style={{
-          backgroundImage: "url(/images/tartan.jpg)",
-          backgroundPosition: "center top",
-        }}
-      />
+  const [user, setUser] = useState<User | null>(null)
 
-      {/* Logo and Hero */}
-      <div className="px-4 py-6 text-center">
-        <div className="flex justify-center mb-4">
-          <Image
-            src="/images/tt-20logo.png"
-            alt="Tartan Talks Logo"
-            width={200}
-            height={200}
-            className="w-40 h-40 object-contain"
-          />
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+    })
+  }, [])
+
+  const cardVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    hover: { scale: 1.05, y: -5 },
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <section className="relative w-full h-[50vh] overflow-hidden flex flex-col">
+        {/* Background image */}
+        <Image
+          src="/images/lunch-atop-a-skyscraper-charles-clyde-ebbets.jpg"
+          alt="Workers on skyscraper"
+          fill
+          className="object-contain"
+          priority
+        />
+
+        {/* Tartan pattern overlay at top */}
+        <div
+          className="absolute top-0 left-0 w-full h-24 md:h-32 bg-cover bg-repeat-x z-20"
+          style={{
+            backgroundImage: "url(/images/tartan.jpg)",
+          }}
+        />
+
+        {/* Dark overlay at bottom for readability */}
+        <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10" />
+
+        {/* Header Actions - Top Right */}
+        <div className="absolute top-4 right-4 z-50">
+          {user ? (
+            <SignOutButton className="bg-white/90 backdrop-blur shadow-sm hover:bg-white text-red-600" />
+          ) : (
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[rgb(20,47,84)] bg-white/90 backdrop-blur shadow-sm hover:bg-white rounded-lg transition-colors"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Login</span>
+            </Link>
+          )}
         </div>
 
-        <h1 className="text-4xl font-bold text-slate-900 mb-1">Tartan Talks</h1>
-        <p className="text-lg text-slate-600 mb-6">"Fixers &amp; Mixers" Connecting trusted businessess</p>
-      </div>
+        {/* Hero content positioned at BOTTOM below the men */}
+        <div className="relative z-30 mt-auto mb-20 text-center px-5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-sidebar-accent">
+              Tartan Talks
+            </h1>
+            <p className="text-lg sm:text-xl md:text-2xl text-white tracking-wider mt-3 font-light drop-shadow-lg">
+              "FIXERS & MIXERS"
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-      {/* Bento Grid */}
-      <div className="px-4 py-6 max-w-2xl mx-auto pb-40">
-        <div className="grid grid-cols-1 gap-4">
-          {/* Browse Directory */}
-          <Link href="/directory">
-            <div className="bento-card-lg bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 cursor-pointer group p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
-                  <Users className="w-6 h-6 text-white" />
+      <section className="bg-transparent px-4 py-12">
+        <div className="max-w-2xl mx-auto space-y-4">
+          {/* Browse Directory Card */}
+          <motion.div
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            transition={{ delay: 0.4 }}
+          >
+            <Link
+              href="/directory"
+              className="block bg-slate-800/50 backdrop-blur-sm border-2 border-slate-700 rounded-2xl p-6 shadow-xl hover:bg-slate-800/80 transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-1">Browse Directory</h2>
+                    <p className="text-slate-300">
+                      Find trusted members, search by trade, and connect with businesses in your area.
+                    </p>
+                  </div>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-white transition" />
+                <ChevronRight className="w-8 h-8 text-slate-400 group-hover:text-white transition-colors flex-shrink-0" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">Browse Directory</h2>
-              <p className="text-slate-300 text-sm">
-                Find trusted members, search by trade, and connect with businesses in your area.
-              </p>
-            </div>
-          </Link>
+            </Link>
+          </motion.div>
 
-          {/* Explore Trades */}
-          <Link href="/trades">
-            <div className="bento-card-lg bg-gradient-to-br from-teal-600 to-emerald-700 border-teal-500 cursor-pointer group p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
-                  <Briefcase className="w-6 h-6 text-white" />
+          {/* Explore Trades Card */}
+          <motion.div
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            transition={{ delay: 0.5 }}
+          >
+            <Link
+              href="/trades"
+              className="block bg-gradient-to-br from-teal-900/80 to-teal-800/80 border-2 border-teal-700/50 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-teal-800/50 rounded-full flex items-center justify-center">
+                    <Building2 className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-1">Explore Trades</h2>
+                    <p className="text-teal-100/90">
+                      Browse categories and discover professionals organized by their specialties.
+                    </p>
+                  </div>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-white transition" />
+                <ChevronRight className="w-8 h-8 text-teal-200/60 group-hover:text-white transition-colors flex-shrink-0" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">Explore Trades</h2>
-              <p className="text-slate-100 text-sm">
-                Browse categories and discover professionals organized by their specialties.
-              </p>
-            </div>
-          </Link>
+            </Link>
+          </motion.div>
 
-          {/* Mark Innes Founder Card */}
-          <div className="bento-card-lg bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 p-6">
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <Image
-                  src="/images/markinnes.jpeg"
-                  alt="Mark Innes - Founder"
-                  width={80}
-                  height={80}
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
+          {/* Refer a Friend Card */}
+          <motion.div
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            transition={{ delay: 0.6 }}
+            className="bg-gradient-to-br from-amber-600/90 to-orange-700/90 border-2 border-amber-600/50 rounded-2xl p-6 shadow-xl"
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 bg-amber-700/50 rounded-full flex items-center justify-center flex-shrink-0">
+                <UserPlus className="w-8 h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-slate-900 mb-1">Mark Innes</h3>
-                <p className="text-sm text-slate-600 mb-3">Founder & Community Leader</p>
-                <a
-                  href="https://www.linkedin.com/in/tartantimber/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-semibold hover:shadow-lg transition"
-                >
-                  <Linkedin className="w-4 h-4" />
-                  Connect
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* About Section */}
-          <Link href="/about">
-            <div className="bento-card-lg bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-200 cursor-pointer group p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-lg bg-indigo-600/10 flex items-center justify-center group-hover:bg-indigo-600/20 transition">
-                  <Info className="w-6 h-6 text-indigo-600" />
+                <h2 className="text-2xl font-bold text-white mb-2">Refer a Friend</h2>
+                <p className="text-amber-100/90 mb-4">
+                  Know someone who'd be perfect for Tartan Talks? Get in touch with Mark Innes, Founder and Host, to
+                  make a referral.
+                </p>
+                <div className="space-y-2">
+                  <a
+                    href="mailto:mark@tartantimber.com"
+                    className="flex items-center gap-2 text-white hover:text-amber-200 transition-colors"
+                  >
+                    <Mail className="w-5 h-5" />
+                    <span className="font-medium">mark@tartantimber.com</span>
+                  </a>
+                  <a
+                    href="tel:07769677121"
+                    className="flex items-center gap-2 text-white hover:text-amber-200 transition-colors"
+                  >
+                    <Phone className="w-5 h-5" />
+                    <span className="font-medium">07769 677121</span>
+                  </a>
                 </div>
-                <ArrowRight className="w-5 h-5 text-indigo-600/60 group-hover:text-indigo-600 transition" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900 mb-1">About Tartan Talks</h2>
-              <p className="text-slate-600 text-sm">
-                Learn about our mission, values, and the community we're building.
-              </p>
             </div>
-          </Link>
+          </motion.div>
+        </div>
 
-          {/* Get In Touch */}
-          <div className="bento-card-lg bg-gradient-to-br from-rose-50 to-pink-50 border-rose-200 p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-lg bg-rose-600/10 flex items-center justify-center">
-                <Mail className="w-6 h-6 text-rose-600" />
-              </div>
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 mb-2">Get In Touch</h2>
-            <p className="text-slate-600 text-sm mb-4">
-              Interested in joining Tartan Talks? We'd love to hear from you.
-            </p>
-            <button className="text-rose-600 font-semibold text-sm hover:text-rose-700 transition">Contact Us →</button>
+        {/* Value Props */}
+        <div className="max-w-2xl mx-auto mt-12">
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              {
+                icon: Users,
+                title: "Professional Network",
+                desc: "Vetted local businesses",
+                color: "from-blue-600 to-indigo-700",
+              },
+              {
+                icon: Building2,
+                title: "Local Trades",
+                desc: "Trusted services nearby",
+                color: "from-teal-600 to-cyan-700",
+              },
+              { icon: Phone, title: "Direct Contact", desc: "Quick responses", color: "from-amber-600 to-orange-700" },
+              { icon: MapPin, title: "Regional", desc: "Edinburgh & Lothians", color: "from-emerald-600 to-teal-700" },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                variants={cardVariants}
+                initial="initial"
+                animate="animate"
+                whileHover="hover"
+                transition={{ delay: 0.7 + index * 0.1 }}
+                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 text-center"
+              >
+                <div
+                  className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg`}
+                >
+                  <item.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-sm font-bold text-white mb-1">{item.title}</h3>
+                <p className="text-xs text-slate-300">{item.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Tartan Footer Divider */}
-      <div
-        className="h-12 bg-cover bg-center fixed bottom-0 left-0 right-0"
-        style={{
-          backgroundImage: "url(/images/tartan.jpg)",
-          backgroundPosition: "center bottom",
-        }}
-      />
+      {/* Community Section */}
+      <section className="bg-slate-900/50 py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8 text-white">Our Community</h2>
+          <p className="text-lg text-slate-300 text-center mb-12">
+            Tartan Talks brings together business owners, trades professionals, and service providers across Edinburgh
+            and the Lothians. Our members are committed to quality service and building lasting business relationships.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { title: "Edinburgh", desc: "Scotland's capital, home to our largest member community" },
+              { title: "West & East Lothian", desc: "Serving Livingston, Bathgate, Linlithgow, and surrounding areas" },
+              { title: "Midlothian", desc: "Dalkeith, Penicuik, Bonnyrigg, and surrounding areas" },
+              { title: "Scottish Borders", desc: "Galashiels, Kelso, Peebles, and border communities" },
+              { title: "Growing Network", desc: "Expanding across Central Scotland with trusted professionals" },
+            ].map((location, index) => (
+              <motion.div
+                key={location.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 + index * 0.1 }}
+                className="bg-slate-800 border border-slate-700 p-6 rounded-lg shadow-md"
+              >
+                <h3 className="font-bold text-lg mb-2 text-white">{location.title}</h3>
+                <p className="text-slate-400 text-sm">{location.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-transparent text-slate-400 py-8 px-4 pb-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-slate-500">© 2026 Tartan Talks. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   )
 }

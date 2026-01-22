@@ -1,21 +1,22 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 import { Download, Upload, Edit, Trash2, Loader2, Search } from "lucide-react"
 import Image from "next/image"
 
 interface Member {
-  id: string
-  firstName: string
-  lastName: string
+  member_id: string
+  first_name: string
+  last_name: string
   email: string
   phone: string
   company: string
   trade: string
   location: string
-  membershipType: string
+  membership_type: string
   status: string
-  joinDate: string
+  join_date: string
   tags: string[]
   website?: string
 }
@@ -27,11 +28,17 @@ export default function AdminPage() {
   const [editingMember, setEditingMember] = useState<Member | null>(null)
 
   useEffect(() => {
-    const loadMembers = () => {
+    const fetchMembers = async () => {
+      const supabase = createClient()
       try {
-        const stored = localStorage.getItem("tartan_members")
-        if (stored) {
-          setMembers(JSON.parse(stored))
+        const { data, error } = await supabase
+          .from('members')
+          .select('*')
+
+        if (error) {
+          console.error('Error fetching members:', error)
+        } else if (data) {
+          setMembers(data as Member[])
         }
       } catch (error) {
         console.error("Failed to load members:", error)
@@ -40,22 +47,20 @@ export default function AdminPage() {
       }
     }
 
-    loadMembers()
+    fetchMembers()
   }, [])
 
   const filteredMembers = members.filter(
     (member) =>
-      member.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.trade.toLowerCase().includes(searchQuery.toLowerCase()),
+      (member.first_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (member.last_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      member.company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      member.trade?.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this member?")) {
-      const updated = members.filter((m) => m.id !== id)
-      setMembers(updated)
-      localStorage.setItem("tartan_members", JSON.stringify(updated))
+  const handleDelete = async (id: string) => {
+    if (confirm("Delete is not yet implemented for security reasons.")) {
+      // Implement Supabase delete here when policies allow
     }
   }
 
@@ -63,7 +68,7 @@ export default function AdminPage() {
     const csv = [
       ["First Name", "Last Name", "Email", "Phone", "Company", "Trade", "Location", "Status"].join(","),
       ...members.map((m) =>
-        [m.firstName, m.lastName, m.email, m.phone, m.company, m.trade, m.location, m.status].join(","),
+        [m.first_name, m.last_name, m.email, m.phone, m.company, m.trade, m.location, m.status].join(","),
       ),
     ].join("\n")
 
@@ -150,9 +155,9 @@ export default function AdminPage() {
               </thead>
               <tbody>
                 {filteredMembers.map((member) => (
-                  <tr key={member.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <tr key={member.member_id} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                      {member.firstName} {member.lastName}
+                      {member.first_name} {member.last_name}
                     </td>
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{member.company}</td>
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{member.trade}</td>
@@ -160,9 +165,8 @@ export default function AdminPage() {
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{member.phone}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span
-                        className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                          member.status === "Active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
-                        }`}
+                        className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${member.status === "Active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
+                          }`}
                       >
                         {member.status}
                       </span>
@@ -176,7 +180,7 @@ export default function AdminPage() {
                           <Edit className="w-4 h-4 text-gray-600" />
                         </button>
                         <button
-                          onClick={() => handleDelete(member.id)}
+                          onClick={() => handleDelete(member.member_id)}
                           className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                         >
                           <Trash2 className="w-4 h-4 text-red-600" />
