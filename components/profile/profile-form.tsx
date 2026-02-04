@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { type User } from '@supabase/supabase-js'
+import { Switch } from '@/components/ui/switch'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -34,6 +35,8 @@ export function ProfileForm({ user }: { user: User }) {
     const [website, setWebsite] = useState('')
     const [location, setLocation] = useState('')
     const [category, setCategory] = useState('')
+    const [isEmailPublic, setIsEmailPublic] = useState(false)
+    const [isPhonePublic, setIsPhonePublic] = useState(false)
 
     const supabase = createClient()
 
@@ -57,6 +60,8 @@ export function ProfileForm({ user }: { user: User }) {
                 setWebsite(data.website || '')
                 setLocation(data.location || '')
                 setCategory(data.category || '')
+                setIsEmailPublic(data.is_email_public || false)
+                setIsPhonePublic(data.is_phone_public || false)
             }
             setLoading(false)
         }
@@ -78,6 +83,8 @@ export function ProfileForm({ user }: { user: User }) {
             website,
             location,
             category,
+            is_email_public: isEmailPublic,
+            is_phone_public: isPhonePublic,
             email: user.email, // Ensure email is kept in sync
             updated_at: new Date().toISOString(),
         }
@@ -154,12 +161,16 @@ export function ProfileForm({ user }: { user: User }) {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="location" className="text-slate-300">Location</Label>
-                            <Input
-                                id="location"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
-                            />
+                            <Select value={location} onValueChange={setLocation}>
+                                <SelectTrigger className="bg-slate-900/50 border-slate-600 text-white">
+                                    <SelectValue placeholder="Select location" className="text-slate-400" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-800 border-slate-700 z-[100] text-white">
+                                    <SelectItem value="Glasgow" className="focus:bg-slate-700 focus:text-white">Glasgow</SelectItem>
+                                    <SelectItem value="Edinburgh" className="focus:bg-slate-700 focus:text-white">Edinburgh</SelectItem>
+                                    <SelectItem value="Glasgow & Edinburgh" className="focus:bg-slate-700 focus:text-white">Glasgow & Edinburgh</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
 
@@ -189,6 +200,30 @@ export function ProfileForm({ user }: { user: User }) {
                             onChange={(e) => setWebsite(e.target.value)}
                             className="bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
                         />
+                    </div>
+
+                    <div className="space-y-4 pt-4 border-t border-slate-700">
+                        <h3 className="text-lg font-medium text-white">Privacy Settings</h3>
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <Label className="text-slate-300">Public Email</Label>
+                                <p className="text-sm text-slate-500">Show your email address on the public directory</p>
+                            </div>
+                            <Switch
+                                checked={isEmailPublic}
+                                onCheckedChange={setIsEmailPublic}
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <Label className="text-slate-300">Public Phone</Label>
+                                <p className="text-sm text-slate-500">Show your phone number on the public directory</p>
+                            </div>
+                            <Switch
+                                checked={isPhonePublic}
+                                onCheckedChange={setIsPhonePublic}
+                            />
+                        </div>
                     </div>
                 </CardContent>
                 <CardFooter>

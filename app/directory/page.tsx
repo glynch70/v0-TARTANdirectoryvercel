@@ -24,13 +24,14 @@ export default function DirectoryPage() {
   const [hasMounted, setHasMounted] = useState(false)
   const [members, setMembers] = useState<Member[]>([])
   const [searchQuery, setSearchQuery] = useState("")
+  const [locationFilter, setLocationFilter] = useState("All")
 
   useEffect(() => {
     const fetchMembers = async () => {
       const supabase = createClient()
       try {
         const { data, error } = await supabase
-          .from('members')
+          .from('directory_profiles')
           .select('*')
           .eq('status', 'Active')
 
@@ -78,8 +79,22 @@ export default function DirectoryPage() {
       })
     }
 
+    // Apply Location Filter
+    if (locationFilter !== "All") {
+      filtered = filtered.filter((member) => {
+        const loc = String(member.location || "")
+        if (locationFilter === "Glasgow") {
+          return loc === "Glasgow" || loc === "Glasgow & Edinburgh"
+        }
+        if (locationFilter === "Edinburgh") {
+          return loc === "Edinburgh" || loc === "Glasgow & Edinburgh"
+        }
+        return true
+      })
+    }
+
     return filtered
-  }, [hasMounted, members, searchQuery])
+  }, [hasMounted, members, searchQuery, locationFilter])
 
   if (!hasMounted) {
     return (
@@ -110,7 +125,42 @@ export default function DirectoryPage() {
               Back
             </button>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white mb-3">Directory</h1>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-white">Directory</h1>
+
+            {/* Location Filter Tabs */}
+            <div className="flex p-1 bg-slate-800/50 rounded-lg border border-white/10 w-full sm:w-auto">
+              <button
+                onClick={() => setLocationFilter("All")}
+                className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${locationFilter === "All"
+                  ? "bg-amber-500 text-white shadow-lg"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setLocationFilter("Glasgow")}
+                className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${locationFilter === "Glasgow"
+                  ? "bg-amber-500 text-white shadow-lg"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+              >
+                Glasgow
+              </button>
+              <button
+                onClick={() => setLocationFilter("Edinburgh")}
+                className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${locationFilter === "Edinburgh"
+                  ? "bg-amber-500 text-white shadow-lg"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+              >
+                Edinburgh
+              </button>
+            </div>
+          </div>
+
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input

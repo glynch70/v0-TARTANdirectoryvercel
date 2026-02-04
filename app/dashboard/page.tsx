@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Users, Grid3x3, TrendingUp, Search, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { SignOutButton } from "@/components/auth/sign-out-button"
+import { UpcomingEvents } from "@/components/dashboard/next-event-card"
 
 interface Member {
   member_id: string
@@ -93,47 +94,38 @@ export default function DashboardPage() {
 
       {/* Bento Grid Stats */}
       <div className="px-4 py-6 space-y-4">
-        {/* Total Members - Large Card */}
-        <Link
-          href="/directory"
-          className="block bg-gradient-to-br from-blue-600 to-blue-700/80 backdrop-blur-sm border border-white/10 rounded-3xl p-6 shadow-xl active:scale-[0.98] transition-all"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
-              <Users className="w-7 h-7 text-white" />
-            </div>
-            <Search className="w-6 h-6 text-white/60" />
-          </div>
-          <p className="text-blue-100 text-sm font-medium mb-1">Total Members</p>
-          <p className="text-white font-display text-5xl font-bold mb-3">{members.length}</p>
-          <div className="flex items-center gap-4 text-sm text-blue-100">
-            <span>{activeMembers.length} Active</span>
-            <span>•</span>
-            <span>Tap to search</span>
-          </div>
-        </Link>
 
-        {/* 2x2 Grid */}
+        {/* Upcoming Events */}
+        <UpcomingEvents />
+
+        {/* Action Grid */}
         <div className="grid grid-cols-2 gap-4">
-          {/* Active Members */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-5 shadow-lg">
-            <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center mb-3">
-              <Users className="w-5 h-5 text-green-400" />
+          {/* Search Directory */}
+          <Link
+            href="/directory"
+            className="block bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-5 shadow-md active:scale-[0.98] transition-all"
+          >
+            <div className="flex flex-col h-full justify-between gap-4">
+              <div className="flex justify-between items-start">
+                <p className="text-green-100 text-xs font-medium">Find a member</p>
+                <Search className="w-6 h-6 text-white/80" />
+              </div>
+              <p className="text-white font-semibold text-lg leading-tight">Search Directory</p>
             </div>
-            <p className="text-slate-400 text-xs font-medium mb-1">Active</p>
-            <p className="font-display text-3xl font-bold text-white">{activeMembers.length}</p>
-          </div>
+          </Link>
 
-          {/* Unique Trades */}
+          {/* Explore Trades */}
           <Link
             href="/trades"
-            className="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-5 shadow-lg active:scale-[0.98] transition-all"
+            className="block bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-5 shadow-md active:scale-[0.98] transition-all"
           >
-            <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center mb-3">
-              <Grid3x3 className="w-5 h-5 text-purple-400" />
+            <div className="flex flex-col h-full justify-between gap-4">
+              <div className="flex justify-between items-start">
+                <p className="text-orange-100 text-xs font-medium">Browse by profession</p>
+                <Grid3x3 className="w-6 h-6 text-white/80" />
+              </div>
+              <p className="text-white font-semibold text-lg leading-tight">Explore Trades</p>
             </div>
-            <p className="text-slate-400 text-xs font-medium mb-1">Trades</p>
-            <p className="font-display text-3xl font-bold text-white">{trades.length}</p>
           </Link>
 
           {/* Most Common Trade */}
@@ -157,50 +149,28 @@ export default function DashboardPage() {
           <p className="font-display text-4xl font-bold text-white mb-4">{recentMembers.length}</p>
           <div className="space-y-3">
             {recentMembers.slice(0, 3).map((member) => (
-              <div key={member.member_id} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
-                  {member.first_name[0]}
-                  {member.last_name[0]}
+              <Link
+                key={member.member_id}
+                href={`/directory/${member.member_id}`}
+                className="block hover:bg-white/5 rounded-lg p-2 transition-colors -mx-2"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
+                    {member.first_name[0]}
+                    {member.last_name[0]}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm text-white truncate">
+                      {member.first_name} {member.last_name}
+                    </p>
+                    <p className="text-xs text-slate-400 truncate">{member.trade}</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-white truncate">
-                    {member.first_name} {member.last_name}
-                  </p>
-                  <p className="text-xs text-slate-400 truncate">{member.trade}</p>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="space-y-3">
-          <Link
-            href="/directory"
-            className="block bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-5 shadow-md active:scale-[0.98] transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm font-medium mb-1">Find a member</p>
-                <p className="text-white font-semibold text-lg">Search Directory</p>
-              </div>
-              <Search className="w-8 h-8 text-white/80" />
-            </div>
-          </Link>
-
-          <Link
-            href="/trades"
-            className="block bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-5 shadow-md active:scale-[0.98] transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-100 text-sm font-medium mb-1">Browse by profession</p>
-                <p className="text-white font-semibold text-lg">Explore Trades</p>
-              </div>
-              <Grid3x3 className="w-8 h-8 text-white/80" />
-            </div>
-          </Link>
-        </div>
       </div>
     </div>
   )

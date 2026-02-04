@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Phone, Mail, MapPin, ExternalLink, Building2, User, ArrowLeft, Loader2 } from "lucide-react"
+import { Phone, Mail, MapPin, ExternalLink, Building2, User, ArrowLeft, Loader2, Lock } from "lucide-react"
 import Link from "next/link"
 
 interface Member {
   member_id: string
   first_name: string
   last_name: string
-  email: string
-  phone: string
+  email: string | null
+  phone: string | null
   company: string
   trade: string
   location: string
@@ -34,7 +34,7 @@ export default function MemberProfilePage() {
       const supabase = createClient()
       try {
         const { data, error } = await supabase
-          .from('members')
+          .from('directory_profiles')
           .select('*')
           .eq('member_id', params.id)
           .single()
@@ -118,20 +118,36 @@ export default function MemberProfilePage() {
 
           {/* Contact Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a
-              href={`tel:${member.phone}`}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-            >
-              <Phone className="w-5 h-5" />
-              <span>Call</span>
-            </a>
-            <a
-              href={`mailto:${member.email}`}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              <Mail className="w-5 h-5" />
-              <span>Email</span>
-            </a>
+            {member.phone ? (
+              <a
+                href={`tel:${member.phone}`}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                <Phone className="w-5 h-5" />
+                <span>Call</span>
+              </a>
+            ) : (
+              <div className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 text-slate-400 rounded-lg cursor-not-allowed font-medium">
+                <Lock className="w-5 h-5" />
+                <span>Private Number</span>
+              </div>
+            )}
+
+            {member.email ? (
+              <a
+                href={`mailto:${member.email}`}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                <Mail className="w-5 h-5" />
+                <span>Email</span>
+              </a>
+            ) : (
+              <div className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-100 text-slate-400 rounded-lg cursor-not-allowed font-medium">
+                <Lock className="w-5 h-5" />
+                <span>Private Email</span>
+              </div>
+            )}
+
             {member.website && (
               <a
                 href={member.website.startsWith("http") ? member.website : `https://${member.website}`}
@@ -159,18 +175,26 @@ export default function MemberProfilePage() {
                   <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Phone</p>
-                    <a href={`tel:${member.phone}`} className="text-gray-900 hover:text-[rgb(20,47,84)]">
-                      {member.phone}
-                    </a>
+                    {member.phone ? (
+                      <a href={`tel:${member.phone}`} className="text-gray-900 hover:text-[rgb(20,47,84)]">
+                        {member.phone}
+                      </a>
+                    ) : (
+                      <span className="text-slate-400 italic">Hidden</span>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <a href={`mailto:${member.email}`} className="text-gray-900 hover:text-[rgb(20,47,84)] break-all">
-                      {member.email}
-                    </a>
+                    {member.email ? (
+                      <a href={`mailto:${member.email}`} className="text-gray-900 hover:text-[rgb(20,47,84)] break-all">
+                        {member.email}
+                      </a>
+                    ) : (
+                      <span className="text-slate-400 italic">Hidden</span>
+                    )}
                   </div>
                 </div>
                 {member.website && (
