@@ -143,6 +143,7 @@ export default function DashboardPage() {
           )}
         </div>
 
+        {/* Sync Test Comment: Trigger rebuild to verify dashboard card deployment */}
         {/* Recently Added */}
         <div className="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-5 shadow-lg">
           <h3 className="font-semibold text-white mb-3">Recently Added (30 days)</h3>
