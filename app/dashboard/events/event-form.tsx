@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -9,44 +8,97 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Upload, X } from "lucide-react"
 import Link from "next/link"
-import type { Database } from "@/lib/database.types"
-
-type Event = Database["public"]["Tables"]["events"]["Row"]
+import { createClient } from "@/lib/supabase/client"
+import { toast } from "sonner"
+import Image from "next/image"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface EventFormProps {
-  event?: Event
+  event?: any // Using any for now to bypass strict typing if database types aren't fully sync'd
   userId: string
 }
 
 export function EventForm({ event, userId }: EventFormProps) {
   const router = useRouter()
+  const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   const [formData, setFormData] = useState({
     event_name: event?.event_name || "",
-    event_date: event?.event_date || "",
+    event_date: event?.event_date ? new Date(event.event_date).toISOString().slice(0, 16) : "", // Format for datetime-local
     location: event?.location || "",
     capacity: event?.capacity?.toString() || "",
     description: event?.description || "",
+    image_url: event?.image_url || "",
   })
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true)
+      if (!e.target.files || e.target.files.length === 0) {
+        throw new Error('You must select an image to upload.')
+      }
+
+      const file = e.target.files[0]
+      const fileExt = file.name.split('.').pop()
+      const filePath = `${Math.random()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('event-images')
+        .upload(filePath, file)
+
+      if (uploadError) {
+        throw uploadError
+      }
+
+      const { data } = supabase.storage
+        .from('event-images')
+        .getPublicUrl(filePath)
+
+      setFormData({ ...formData, image_url: data.publicUrl })
+      toast.success('Image uploaded successfully')
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setUploading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError(null)
 
     try {
-      alert("Database operations disabled. Please run SQL scripts to set up the database.")
-      if (event) {
-        router.push(`/dashboard/events/${event.event_id}`)
-      } else {
-        router.push("/dashboard/events")
+      const eventData = {
+        event_name: formData.event_name,
+        event_date: new Date(formData.event_date).toISOString(),
+        location: formData.location,
+        capacity: formData.capacity ? parseInt(formData.capacity) : null,
+        description: formData.description,
+        image_url: formData.image_url,
+        created_by: userId
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+
+      const { error } = event
+        ? await supabase
+          .from('events')
+          .update(eventData)
+          .eq('event_id', event.event_id)
+        : await supabase
+          .from('events')
+          .insert([eventData])
+
+      if (error) throw error
+
+      toast.success(event ? "Event updated!" : "Event created!")
+      router.push("/dashboard/events")
+      router.refresh()
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err.message || "Failed to save event")
     } finally {
       setIsLoading(false)
     }
@@ -64,8 +116,6 @@ export function EventForm({ event, userId }: EventFormProps) {
           </Button>
         </div>
 
-        {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">{error}</div>}
-
         <Card>
           <CardHeader>
             <CardTitle>Event Details</CardTitle>
@@ -81,12 +131,46 @@ export function EventForm({ event, userId }: EventFormProps) {
                 placeholder="e.g., Monthly Networking Meeting"
               />
             </div>
+
+            {/* Image Upload */}
+            <div className="space-y-2">
+              <Label>Event Image</Label>
+              <div className="flex items-center gap-4">
+                {formData.image_url && (
+                  <div className="relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200">
+                    <Image
+                      src={formData.image_url}
+                      alt="Event preview"
+                      fill
+                      className="object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, image_url: "" })}
+                      className="absolute top-1 right-1 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+                <div className="flex-1">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                  />
+                  {uploading && <p className="text-sm text-muted-foreground mt-1">Uploading...</p>}
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="event_date">Date *</Label>
+                <Label htmlFor="event_date">Date & Time *</Label>
                 <Input
                   id="event_date"
-                  type="date"
+                  type="datetime-local"
                   required
                   value={formData.event_date}
                   onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
@@ -105,12 +189,18 @@ export function EventForm({ event, userId }: EventFormProps) {
             </div>
             <div>
               <Label htmlFor="location">Location</Label>
-              <Input
-                id="location"
+              <Select
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="e.g., Ravelston House Hotel"
-              />
+                onValueChange={(value) => setFormData({ ...formData, location: value })}
+              >
+                <SelectTrigger id="location">
+                  <SelectValue placeholder="Select location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Edinburgh">Edinburgh</SelectItem>
+                  <SelectItem value="Glasgow">Glasgow</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label htmlFor="description">Description</Label>
@@ -126,14 +216,15 @@ export function EventForm({ event, userId }: EventFormProps) {
         </Card>
 
         <div className="flex gap-2">
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading || uploading} className="bg-orange-500 hover:bg-orange-600 text-white">
             {isLoading ? "Saving..." : event ? "Update Event" : "Create Event"}
           </Button>
           <Button variant="outline" asChild type="button">
-            <Link href={event ? `/dashboard/events/${event.event_id}` : "/dashboard/events"}>Cancel</Link>
+            <Link href="/dashboard/events">Cancel</Link>
           </Button>
         </div>
       </div>
     </form>
   )
 }
+
