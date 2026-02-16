@@ -16,8 +16,11 @@ import {
   UserCheck,
   Briefcase,
   ArrowLeft,
+  MapPin,
+  Search,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
 
 interface Member {
   member_id: string
@@ -27,6 +30,7 @@ interface Member {
   category: string | null
   trade: string | null
   status: string
+  location: string | null
 }
 
 const CATEGORY_ICONS: Record<string, any> = {
@@ -191,31 +195,52 @@ export default function TradesPage() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="border-t border-white/10 bg-white/5 overflow-hidden"
+                    className="border-t border-white/10 bg-slate-900/50"
                   >
-                    {group.members.map((member, memberIndex) => (
-                      <motion.button
-                        key={member.member_id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: memberIndex * 0.03 }}
-                        onClick={() => router.push(`/directory/${member.member_id}`)}
-                        className="w-full px-5 py-4 border-b border-white/10 last:border-b-0 hover:bg-white/10 transition-colors text-left"
-                        whileHover={{ x: 5 }}
-                      >
-                        <div className="mb-2">
-                          <span
-                            className={`inline-block px-2.5 py-1 bg-gradient-to-r ${colorClass} text-white text-xs font-semibold rounded`}
+                    <div className="p-4 space-y-4">
+                      {group.members.map((member, memberIndex) => (
+                        <motion.div
+                          key={member.member_id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: memberIndex * 0.05 }}
+                        >
+                          <Link
+                            href={`/directory/${member.member_id}`}
+                            className="block bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-sm border border-white/10 rounded-xl p-5 shadow-lg hover:bg-slate-700/80 hover:border-white/20 transition-all duration-200"
                           >
-                            {member.trade || 'Member'}
-                          </span>
-                        </div>
-                        <h3 className="font-bold text-white mb-1">
-                          {member.first_name} {member.last_name}
-                        </h3>
-                        <p className="text-sm text-slate-400">{member.company}</p>
-                      </motion.button>
-                    ))}
+                            {/* Name */}
+                            <h3 className="text-lg sm:text-xl font-bold text-white mb-1 line-clamp-1">
+                              {member.first_name} {member.last_name}
+                            </h3>
+
+                            {/* Company */}
+                            <div className="flex items-start gap-2 mb-3">
+                              <Building2 className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
+                              <p className="text-slate-300 font-medium text-sm sm:text-base line-clamp-1">
+                                {member.company}
+                              </p>
+                            </div>
+
+                            {/* Description Section */}
+                            <div className="mb-3">
+                              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                                Description
+                              </p>
+                              <p className={`text-sm font-medium line-clamp-2 bg-gradient-to-r ${colorClass} bg-clip-text text-transparent`}>
+                                {member.trade || "Member"}
+                              </p>
+                            </div>
+
+                            {/* Location */}
+                            <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm mt-auto">
+                              <MapPin className="w-4 h-4 flex-shrink-0" />
+                              <span className="line-clamp-1">{member.location || "Location not specified"}</span>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
