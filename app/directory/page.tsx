@@ -196,26 +196,27 @@ export default function DirectoryPage() {
                   href={`/directory/${member.member_id}`}
                   className="block bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md sm:shadow-xl hover:bg-slate-700/80 hover:border-white/20 transition-all duration-200"
                 >
-                  {/* Trade Badge - responsive sizing */}
-                  <div className="mb-3">
-                    <span className="inline-block px-2.5 sm:px-3 py-1 sm:py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs sm:text-sm font-semibold rounded-md sm:rounded-lg shadow-lg">
-                      {member.trade || 'Member'}
-                    </span>
-                  </div>
-
-                  {/* Name - responsive text sizing */}
+                  {/* Name */}
                   <h3 className="text-lg sm:text-xl font-bold text-white mb-1 line-clamp-2">
                     {member.first_name} {member.last_name}
                   </h3>
 
                   {/* Company */}
-                  <div className="flex items-start gap-2 mb-2">
+                  <div className="flex items-start gap-2 mb-3">
                     <Building2 className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
-                    <p className="text-slate-300 font-medium text-sm sm:text-base line-clamp-2">{member.company}</p>
+                    <p className="text-slate-300 font-medium text-sm sm:text-base line-clamp-1">{member.company}</p>
                   </div>
 
-                  {/* Location */}
-                  <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm">
+                  {/* Description Section */}
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Description</p>
+                    <p className="text-orange-400 text-sm font-medium line-clamp-3">
+                      {member.trade || 'Member'}
+                    </p>
+                  </div>
+
+                  {/* Location - moved to bottom */}
+                  <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm mt-auto">
                     <MapPin className="w-4 h-4 flex-shrink-0" />
                     <span className="line-clamp-1">{member.location}</span>
                   </div>
@@ -235,6 +236,6 @@ export default function DirectoryPage() {
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </div >
   )
 }

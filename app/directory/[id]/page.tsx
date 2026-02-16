@@ -100,21 +100,17 @@ export default function MemberProfilePage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile Header */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
-          {/* Trade Badge */}
-          <div className="mb-6">
-            <span className="inline-block px-4 py-2 bg-[rgb(20,47,84)] text-white font-semibold rounded-lg">
-              {member.trade}
-            </span>
-          </div>
-
           {/* Name and Company */}
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             {member.first_name} {member.last_name}
           </h1>
-          <div className="flex items-center gap-2 text-xl text-gray-700 mb-6">
+          <div className="flex items-center gap-2 text-xl text-gray-700 mb-3">
             <Building2 className="w-5 h-5 text-gray-400" />
             <span className="font-medium">{member.company}</span>
           </div>
+
+          {/* Description / Trade - moved below company */}
+          <p className="text-gray-600 mb-6">{member.trade}</p>
 
           {/* Contact Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -197,6 +193,22 @@ export default function MemberProfilePage() {
                     )}
                   </div>
                 </div>
+
+              </div>
+            </div>
+
+            {/* Business Information */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Business Information</h3>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-gray-500">Location</p>
+                    <p className="text-gray-900">{member.location}</p>
+                  </div>
+                </div>
+
                 {member.website && (
                   <div className="flex items-start gap-3">
                     <ExternalLink className="w-5 h-5 text-gray-400 mt-0.5" />
@@ -213,27 +225,7 @@ export default function MemberProfilePage() {
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
 
-            {/* Business Information */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Business Information</h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-gray-500">Location</p>
-                    <p className="text-gray-900">{member.location}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <User className="w-5 h-5 text-gray-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-gray-500">Membership Type</p>
-                    <p className="text-gray-900">{member.membership_type}</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
