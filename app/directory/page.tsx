@@ -141,15 +141,6 @@ export default function DirectoryPage() {
                 All
               </button>
               <button
-                onClick={() => setLocationFilter("Glasgow")}
-                className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${locationFilter === "Glasgow"
-                  ? "bg-amber-500 text-white shadow-lg"
-                  : "text-slate-400 hover:text-white hover:bg-white/5"
-                  }`}
-              >
-                Glasgow
-              </button>
-              <button
                 onClick={() => setLocationFilter("Edinburgh")}
                 className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${locationFilter === "Edinburgh"
                   ? "bg-amber-500 text-white shadow-lg"
@@ -157,6 +148,15 @@ export default function DirectoryPage() {
                   }`}
               >
                 Edinburgh
+              </button>
+              <button
+                onClick={() => setLocationFilter("Glasgow")}
+                className={`flex-1 sm:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition-all ${locationFilter === "Glasgow"
+                  ? "bg-amber-500 text-white shadow-lg"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+              >
+                Glasgow
               </button>
             </div>
           </div>

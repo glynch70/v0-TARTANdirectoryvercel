@@ -22,7 +22,7 @@ export function LoginForm() {
         e.preventDefault()
         setLoading(true)
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         })
@@ -32,7 +32,23 @@ export function LoginForm() {
             setLoading(false)
         } else {
             toast.success('Logged in successfully')
-            router.push('/profile')
+
+            if (data.user) {
+                const { data: member } = await supabase
+                    .from('members')
+                    .select('member_id')
+                    .eq('member_id', data.user.id)
+                    .single()
+
+                if (member) {
+                    router.push('/')
+                } else {
+                    router.push('/profile')
+                }
+            } else {
+                router.push('/profile')
+            }
+
             router.refresh()
         }
     }

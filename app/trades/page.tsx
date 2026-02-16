@@ -145,7 +145,7 @@ export default function TradesPage() {
         </div>
       </motion.div>
 
-      <div className="px-4 py-4 space-y-3">
+      <div className="px-4 py-4 space-y-3 pb-32">
         {categorizedMembers.map((group, index) => {
           const isExpanded = expandedCategory === group.category
           const Icon = CATEGORY_ICONS[group.category] || Wrench

@@ -71,12 +71,10 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-sidebar-accent">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-widest drop-shadow-lg text-slate-900">
               Tartan Talks
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-white tracking-wider mt-3 font-light drop-shadow-lg">
-              "FIXERS & MIXERS"
-            </p>
+
           </motion.div>
         </div>
       </section>
@@ -132,7 +130,7 @@ export default function HomePage() {
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-1">Explore Trades</h2>
                     <p className="text-teal-100/90">
-                      Browse categories and discover professionals organized by their specialties.
+                      Browse categories and discover professionals organised by their specialties.
                     </p>
                   </div>
                 </div>
@@ -157,8 +155,7 @@ export default function HomePage() {
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-white mb-2">Refer a Friend</h2>
                 <p className="text-amber-100/90 mb-4">
-                  Know someone who'd be perfect for Tartan Talks? Get in touch with Mark Innes, Founder and Host, to
-                  make a referral.
+                  Know someone who'd be perfect for Tartan Talks? Get in touch with Mark, to make a referral.
                 </p>
                 <div className="space-y-2">
                   <a
@@ -181,45 +178,7 @@ export default function HomePage() {
           </motion.div>
         </div>
 
-        {/* Value Props */}
-        <div className="max-w-2xl mx-auto mt-12">
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              {
-                icon: Users,
-                title: "Professional Network",
-                desc: "Vetted local businesses",
-                color: "from-blue-600 to-indigo-700",
-              },
-              {
-                icon: Building2,
-                title: "Local Trades",
-                desc: "Trusted services nearby",
-                color: "from-teal-600 to-cyan-700",
-              },
-              { icon: Phone, title: "Direct Contact", desc: "Quick responses", color: "from-amber-600 to-orange-700" },
-              { icon: MapPin, title: "Regional", desc: "Edinburgh & Lothians", color: "from-emerald-600 to-teal-700" },
-            ].map((item, index) => (
-              <motion.div
-                key={item.title}
-                variants={cardVariants}
-                initial="initial"
-                animate="animate"
-                whileHover="hover"
-                transition={{ delay: 0.7 + index * 0.1 }}
-                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 text-center"
-              >
-                <div
-                  className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg`}
-                >
-                  <item.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-sm font-bold text-white mb-1">{item.title}</h3>
-                <p className="text-xs text-slate-300">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+
       </section>
 
       {/* Community Section */}
@@ -227,16 +186,14 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-8 text-white">Our Community</h2>
           <p className="text-lg text-slate-300 text-center mb-12">
-            Tartan Talks brings together business owners, trades professionals, and service providers across Edinburgh
-            and the Lothians. Our members are committed to quality service and building lasting business relationships.
+            Tartan Talks is more than a networking event - it's a growing community of ambitious, like minded
+            professionals who believe in collaboration over competition. Our mission is simple - connect great people,
+            build stronger businesses and create real opportunities.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {[
               { title: "Edinburgh", desc: "Scotland's capital, home to our largest member community" },
-              { title: "West & East Lothian", desc: "Serving Livingston, Bathgate, Linlithgow, and surrounding areas" },
-              { title: "Midlothian", desc: "Dalkeith, Penicuik, Bonnyrigg, and surrounding areas" },
-              { title: "Scottish Borders", desc: "Galashiels, Kelso, Peebles, and border communities" },
-              { title: "Growing Network", desc: "Expanding across Central Scotland with trusted professionals" },
+              { title: "Glasgow", desc: "Building connections across Scotland's largest city" },
             ].map((location, index) => (
               <motion.div
                 key={location.title}

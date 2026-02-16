@@ -12,13 +12,31 @@ export async function GET(request: Request) {
         if (!error) {
             const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
             const isLocalEnv = process.env.NODE_ENV === 'development'
+
+            // Check if profile is complete
+            let finalNext = next
+            if (next === '/profile') {
+                const { data: { user } } = await supabase.auth.getUser()
+                if (user) {
+                    const { data: member } = await supabase
+                        .from('members')
+                        .select('member_id')
+                        .eq('member_id', user.id)
+                        .single()
+
+                    if (member) {
+                        finalNext = '/'
+                    }
+                }
+            }
+
             if (isLocalEnv) {
                 // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-                return NextResponse.redirect(`${origin}${next}`)
+                return NextResponse.redirect(`${origin}${finalNext}`)
             } else if (forwardedHost) {
-                return NextResponse.redirect(`https://${forwardedHost}${next}`)
+                return NextResponse.redirect(`https://${forwardedHost}${finalNext}`)
             } else {
-                return NextResponse.redirect(`${origin}${next}`)
+                return NextResponse.redirect(`${origin}${finalNext}`)
             }
         }
     }
