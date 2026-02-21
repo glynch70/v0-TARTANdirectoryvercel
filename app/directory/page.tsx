@@ -3,9 +3,10 @@
 import { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Search, MapPin, Loader2, Building2, ArrowLeft } from "lucide-react"
+import { MapPin, Search, Building2, User, Share2, Loader2, ArrowLeft } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import Image from "next/image"
 
 interface Member {
   member_id: string
@@ -17,6 +18,11 @@ interface Member {
   status: string
   category: string | null
   website: string | null
+  email?: string
+  phone?: string
+  membership_type?: string
+  avatar_url?: string | null
+  social_media?: string | null
 }
 
 export default function DirectoryPage() {
@@ -196,15 +202,36 @@ export default function DirectoryPage() {
                   href={`/directory/${member.member_id}`}
                   className="block bg-gradient-to-br from-slate-800/60 to-slate-700/60 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-5 shadow-md sm:shadow-xl hover:bg-slate-700/80 hover:border-white/20 transition-all duration-200"
                 >
-                  {/* Name */}
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-1 line-clamp-2">
-                    {member.first_name} {member.last_name}
-                  </h3>
+                  {/* Header Row: Avatar, Name, and Company */}
+                  <div className="flex items-start gap-4 mb-3">
+                    {/* Avatar */}
+                    <div className="flex-shrink-0">
+                      {member.avatar_url ? (
+                        <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-slate-600 bg-slate-800">
+                          <Image
+                            src={member.avatar_url}
+                            alt={`${member.first_name} ${member.last_name}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-slate-600 bg-slate-800 text-slate-400 flex items-center justify-center">
+                          <User className="w-6 h-6 sm:w-8 sm:h-8" />
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Company */}
-                  <div className="flex items-start gap-2 mb-3">
-                    <Building2 className="w-4 h-4 text-slate-400 mt-1 flex-shrink-0" />
-                    <p className="text-slate-300 font-medium text-sm sm:text-base line-clamp-1">{member.company}</p>
+                    {/* Name and Company details */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg sm:text-xl font-bold text-white mb-1 line-clamp-1">
+                        {member.first_name} {member.last_name}
+                      </h3>
+                      <div className="flex items-start gap-2">
+                        <Building2 className="w-4 h-4 text-slate-400 mt-[2px] flex-shrink-0" />
+                        <p className="text-slate-300 font-medium text-sm sm:text-base line-clamp-1">{member.company}</p>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Description Section */}
@@ -215,10 +242,28 @@ export default function DirectoryPage() {
                     </p>
                   </div>
 
-                  {/* Location - moved to bottom */}
-                  <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm mt-auto">
-                    <MapPin className="w-4 h-4 flex-shrink-0" />
-                    <span className="line-clamp-1">{member.location}</span>
+                  {/* Footer Row: Location and Social */}
+                  <div className="flex items-center justify-between text-slate-400 text-xs sm:text-sm mt-auto">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 flex-shrink-0" />
+                      <span className="line-clamp-1">{member.location}</span>
+                    </div>
+                    {member.social_media && (
+                      <div className="flex items-center gap-1.5 text-pink-400 font-medium z-10 transition-colors hover:text-pink-300"
+                        onClick={(e) => {
+                          // Stop propagation to prevent exactly matching the Next `<Link>` wrap
+                          e.stopPropagation();
+                        }}>
+                        <a href={member.social_media.startsWith("http") ? member.social_media : `https://${member.social_media}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5"
+                        >
+                          <Share2 className="w-4 h-4" />
+                          <span>Social</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </Link>
               </motion.div>

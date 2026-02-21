@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS public.members (
   location TEXT,
   membership_type TEXT,
   status TEXT NOT NULL DEFAULT 'Active' CHECK (status IN ('Active', 'Paused', 'Cancelled')),
+  avatar_url TEXT,
+  social_media TEXT,
   join_date DATE,
   renewal_date DATE,
   events_attended INTEGER DEFAULT 0,
@@ -85,11 +87,28 @@ CREATE POLICY "Super Admin can manage admins"
     )
   );
 
--- RLS Policies for members (all admin roles can view)
-CREATE POLICY "Admins can view all members"
+-- RLS Policies for members (Enforcing Strict Ownership Auth)
+CREATE POLICY "Public Members View"
   ON public.members FOR SELECT
-  USING (auth.uid() IN (SELECT id FROM public.admin_users));
+  USING (true);
 
+CREATE POLICY "Strict Member Insert"
+  ON public.members FOR INSERT
+  TO authenticated
+  WITH CHECK (member_id = auth.uid());
+
+CREATE POLICY "Strict Member Update"
+  ON public.members FOR UPDATE
+  TO authenticated
+  USING (member_id = auth.uid())
+  WITH CHECK (member_id = auth.uid());
+
+CREATE POLICY "Strict Member Delete"
+  ON public.members FOR DELETE
+  TO authenticated
+  USING (member_id = auth.uid());
+
+-- Legacy Admin Fallbacks (If a Super Admin dashboard needs raw manipulation)
 CREATE POLICY "Admin and Super Admin can insert members"
   ON public.members FOR INSERT
   WITH CHECK (

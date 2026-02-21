@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Phone, Mail, MapPin, ExternalLink, Building2, User, ArrowLeft, Loader2, Lock } from "lucide-react"
+import { Phone, Mail, MapPin, ExternalLink, Building2, User, ArrowLeft, Loader2, Lock, Share2 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 interface Member {
   member_id: string
@@ -21,6 +22,8 @@ interface Member {
   tags: string[]
   website?: string
   notes?: string
+  avatar_url?: string | null
+  social_media?: string | null
 }
 
 export default function MemberProfilePage() {
@@ -100,20 +103,42 @@ export default function MemberProfilePage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile Header */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
-          {/* Name and Company */}
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            {member.first_name} {member.last_name}
-          </h1>
-          <div className="flex items-center gap-2 text-xl text-gray-700 mb-3">
-            <Building2 className="w-5 h-5 text-gray-400" />
-            <span className="font-medium">{member.company}</span>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-6">
+            {/* Avatar */}
+            <div className="flex-shrink-0">
+              {member.avatar_url ? (
+                <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100">
+                  <Image
+                    src={member.avatar_url}
+                    alt={`${member.first_name} ${member.last_name}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-lg bg-[rgb(20,47,84)]/10 text-[rgb(20,47,84)] flex items-center justify-center">
+                  <User className="w-12 h-12 md:w-16 md:h-16" />
+                </div>
+              )}
+            </div>
+
+            {/* Name and Company */}
+            <div className="text-center md:text-left flex-1">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                {member.first_name} {member.last_name}
+              </h1>
+              <div className="flex items-center justify-center md:justify-start gap-2 text-xl text-gray-700 mb-3">
+                <Building2 className="w-5 h-5 text-gray-400" />
+                <span className="font-medium">{member.company}</span>
+              </div>
+
+              {/* Description / Trade */}
+              <p className="text-gray-600 block max-w-2xl">{member.trade}</p>
+            </div>
           </div>
 
-          {/* Description / Trade - moved below company */}
-          <p className="text-gray-600 mb-6">{member.trade}</p>
-
           {/* Contact Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {member.phone ? (
               <a
                 href={`tel:${member.phone}`}
@@ -153,6 +178,18 @@ export default function MemberProfilePage() {
               >
                 <ExternalLink className="w-5 h-5" />
                 <span>Website</span>
+              </a>
+            )}
+
+            {member.social_media && (
+              <a
+                href={member.social_media.startsWith("http") ? member.social_media : `https://${member.social_media}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-medium"
+              >
+                <Share2 className="w-5 h-5" />
+                <span>Social</span>
               </a>
             )}
           </div>
@@ -226,6 +263,23 @@ export default function MemberProfilePage() {
                   </div>
                 )}
 
+                {member.social_media && (
+                  <div className="flex items-start gap-3">
+                    <Share2 className="w-5 h-5 text-gray-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-gray-500">Social Media</p>
+                      <a
+                        href={member.social_media.startsWith("http") ? member.social_media : `https://${member.social_media}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-900 hover:text-[rgb(20,47,84)] break-all"
+                      >
+                        {new URL(member.social_media.startsWith("http") ? member.social_media : `https://${member.social_media}`).hostname.replace('www.', '')}
+                      </a>
+                    </div>
+                  </div>
+                )}
+
               </div>
             </div>
           </div>
@@ -245,6 +299,6 @@ export default function MemberProfilePage() {
           )}
         </div>
       </div>
-    </div>
+    </div >
   )
 }

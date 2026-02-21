@@ -35,6 +35,8 @@ export type Database = {
           trade: string | null
           location: string | null
           category: string | null
+          avatar_url: string | null
+          social_media: string | null
           membership_type: string | null
           status: string
           stripe_customer_id: string | null
@@ -58,6 +60,8 @@ export type Database = {
           company?: string | null
           role?: string | null
           location?: string | null
+          avatar_url?: string | null
+          social_media?: string | null
           membership_type?: string | null
           status?: string
           join_date?: string | null
@@ -79,6 +83,8 @@ export type Database = {
           company?: string | null
           role?: string | null
           location?: string | null
+          avatar_url?: string | null
+          social_media?: string | null
           membership_type?: string | null
           status?: string
           join_date?: string | null
